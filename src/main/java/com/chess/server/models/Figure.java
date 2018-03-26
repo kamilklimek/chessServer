@@ -63,6 +63,25 @@ public class Figure {
     private List<Point> calculateBishopMovements(){
         List<Point> movements = new ArrayList<Point>();
 
+        int bishopPositionX = position.getPositionX();
+        int bishopPositionY = position.getPositionY();
+
+        for(int i=0;i<8;i++){
+            for(int j=0;j<8;j++){
+                boolean movementIsNotTheSamePosition = i+bishopPositionX != bishopPositionX && j+bishopPositionY != bishopPositionY;
+                boolean movementsOnDiagonal = i+bishopPositionX == j+bishopPositionY;
+                boolean movementsIsOnReversedDiagonal = true;
+                if(movementsOnDiagonal || movementsIsOnReversedDiagonal && movementIsNotTheSamePosition ){
+                    Point point = new Point(i, j);
+                    movements.add(point);
+                    System.out.println(point.toString());
+                }
+
+
+            }
+        }
+
+
         return movements;
     }
 
@@ -105,6 +124,11 @@ public class Figure {
 
     private List<Point> calculateKnightMovements(){
         List<Point> movements = new ArrayList<Point>();
+
+        int knightPositionX = position.getPositionX();
+        int knightPositionY = position.getPositionY();
+
+
 
         return movements;
     }
