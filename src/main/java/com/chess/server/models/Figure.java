@@ -42,7 +42,7 @@ public class Figure {
         boolean figureIsKnight = typeOfFigure.equals("KNIGHT");
         boolean figureIsKing = typeOfFigure.equals("KING");
         boolean figureIsBishop = typeOfFigure.equals("BISHOP");
-        boolean figureisQueen = typeOfFigure.equals("QUEEN");
+        boolean figureIsQueen = typeOfFigure.equals("QUEEN");
         boolean figureIsRook = typeOfFigure.equals("ROOK");
 
         if(figureIsPawn){
@@ -55,7 +55,7 @@ public class Figure {
             availableMovements = calculateRookMovements();
         }else if(figureIsKing){
             availableMovements = calculateKingMovements();
-        }else if(figureisQueen){
+        }else if(figureIsQueen){
             availableMovements = calculateQueenMovements();
         }
 
