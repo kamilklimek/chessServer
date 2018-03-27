@@ -1,5 +1,6 @@
 package com.chess.server;
 
+import com.chess.server.models.Board;
 import com.chess.server.models.Figure;
 import com.chess.server.models.Point;
 import com.chess.server.models.figures.Bishop;
@@ -12,10 +13,13 @@ public class App
 {
     public static void main( String[] args ) {
 
-        Bishop bishop = new Bishop(new Point(4,4));
+        Board board = new Board();
+        board.display();
 
-        bishop.calculateAllAvailableMovements();
-
+        System.out.println();
+        board.moveFigure(new Point(0,0), new Point(0,3));
+        board.moveFigure(new Point(4,0), new Point(4, 4));
+        board.display();
 
 
     }

@@ -16,6 +16,12 @@ public class Board {
         initGameFromFile(nameFile);
     }
 
+    public Board(String fileName) {
+        boardFields = new Figure[8][8];
+        nameFile = fileName;
+        initGameFromFile(nameFile);
+    }
+
     private void initGameFromFile(String fileName){
         try {
             FileReader fileReader = new FileReader(fileName);
@@ -27,7 +33,7 @@ public class Board {
 
                 for(int j=0;j<line.length();j++){
                     boolean isRook = line.charAt(j) == 'R';
-                    boolean isKnigt = line.charAt(j) == 'N';
+                    boolean isKnight = line.charAt(j) == 'N';
                     boolean isQueen = line.charAt(j) == 'Q';
                     boolean isKing = line.charAt(j) == 'K';
                     boolean isPawn = line.charAt(j) == 'P';
@@ -44,7 +50,7 @@ public class Board {
                         boardFields[i][j] = new Pawn(new Point(j, i));
                     }else if(isQueen){
                         boardFields[i][j] = new Queen(new Point(j, i));
-                    }else if(isKnigt){
+                    }else if(isKnight){
                         boardFields[i][j] = new Knight(new Point(j, i));
                     }else if(isEmpty){
                         boardFields[i][j] = new Figure(new Point(j, i), "EMPTY");
@@ -59,7 +65,7 @@ public class Board {
 
 
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            System.out.println("File with board does not exist.");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -67,12 +73,24 @@ public class Board {
 
     }
 
+    public void moveFigure(Point from, Point to){
+        int fromX = from.getPositionX();
+        int fromY = from.getPositionY();
+
+        int toX = to.getPositionX();
+        int toY = to.getPositionY();
+
+        boardFields[toY][toX] = boardFields[fromY][fromX];
+        boardFields[fromY][fromX] = new Figure(from, "EMPTY");
+
+
+    }
 
     public void display(){
         for(int i=0;i<8;i++){
             for(int j=0;j<8;j++){
                 boolean isRook = boardFields[i][j].getTypeOfFigure() == "ROOK";
-                boolean isKnigt = boardFields[i][j].getTypeOfFigure() == "KNIGHT";
+                boolean isKnight = boardFields[i][j].getTypeOfFigure() == "KNIGHT";
                 boolean isQueen = boardFields[i][j].getTypeOfFigure() == "QUEEN";
                 boolean isKing = boardFields[i][j].getTypeOfFigure() == "KING";
                 boolean isPawn = boardFields[i][j].getTypeOfFigure() == "PAWN";
@@ -89,7 +107,7 @@ public class Board {
                     System.out.print("B");
                 }else if(isPawn){
                     System.out.print("P");
-                }else if(isKnigt){
+                }else if(isKnight){
                     System.out.print("N");
                 }else if(isEmpty) {
                     System.out.print(" ");

@@ -3,6 +3,7 @@ package com.chess.server.models;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by kamil.klimek on 20.03.2018.
@@ -132,4 +133,19 @@ public class Figure {
         return movements;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Figure figure = (Figure) o;
+        return Objects.equals(position, figure.position) &&
+                Objects.equals(typeOfFigure, figure.typeOfFigure) &&
+                Objects.equals(availableMovements, figure.availableMovements);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(position, typeOfFigure, availableMovements);
+    }
 }
