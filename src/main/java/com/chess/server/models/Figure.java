@@ -69,9 +69,11 @@ public class Figure {
 
         for(int i=0;i<8;i++){
             for(int j=0;j<8;j++){
+
                 boolean movementIsNotTheSamePosition = i+bishopPositionX != bishopPositionX && j+bishopPositionY != bishopPositionY;
                 boolean movementsOnDiagonal = i+bishopPositionX == j+bishopPositionY;
                 boolean movementsIsOnReversedDiagonal = true;
+
                 if(movementsOnDiagonal || movementsIsOnReversedDiagonal && movementIsNotTheSamePosition ){
                     Point point = new Point(i, j);
                     movements.add(point);
