@@ -16,5 +16,7 @@ public class App
 
         bishop.calculateAllAvailableMovements();
 
+
+
     }
 }

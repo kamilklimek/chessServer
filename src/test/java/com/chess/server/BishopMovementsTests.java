@@ -29,10 +29,11 @@ public class BishopMovementsTests extends TestCase {
                         new Point(0,8),
                         new Point(1,7),
                         new Point(2,6),
+                        new Point(3,5),
                         new Point(5,3),
                         new Point(6,2),
-                        new Point(5,7),
-                        new Point(,8)
+                        new Point(7,1),
+                        new Point(8,0)
                 )
         );
 

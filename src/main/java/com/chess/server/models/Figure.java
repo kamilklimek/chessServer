@@ -74,7 +74,6 @@ public class Figure {
                 if(movementsOnDiagonal || movementsIsOnReversedDiagonal && movementIsNotTheSamePosition ){
                     Point point = new Point(i, j);
                     movements.add(point);
-                    System.out.println(point.toString());
                 }
 
 
