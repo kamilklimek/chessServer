@@ -47,7 +47,7 @@ public class Board {
                     }else if(isKing){
                         boardFields[i][j] = new King(new Point(j, i));
                     }else if(isPawn){
-                        boardFields[i][j] = new Pawn(new Point(j, i));
+                        boardFields[i][j] = new Pawn(new Point(j, i), true);
                     }else if(isQueen){
                         boardFields[i][j] = new Queen(new Point(j, i));
                     }else if(isKnight){

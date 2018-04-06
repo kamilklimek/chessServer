@@ -133,7 +133,6 @@ public class Figure {
 
     protected List<Point> calculatePawnMovements(){
         List<Point> movements = new ArrayList<Point>();
-
         return movements;
     }
 
