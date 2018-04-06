@@ -108,10 +108,22 @@ public class Figure {
     private List<Point> calculateQueenMovements(){
         List<Point> movements = new ArrayList<Point>();
 
+        int queenPositionX = position.getPositionX();
+        int queenPositionY = position.getPositionY();
+
 
         for(int i=0;i<8;i++){
             for(int j=0;j<8;j++){
-                movements.add(new Point(j,i));
+                boolean horizontally = queenPositionX == j && queenPositionY != i;
+                boolean vertically = queenPositionY == i && queenPositionX != j;
+                boolean onDiagonal = i + queenPositionX == j+queenPositionY && i != queenPositionY;
+                boolean onReversedDiagonal = queenPositionX - j == i - queenPositionY && j != queenPositionX;
+
+                if(horizontally || vertically || onDiagonal || onReversedDiagonal){
+                    Point point = new Point(j,i);
+                    movements.add(point);
+                }
+
             }
 
         }
