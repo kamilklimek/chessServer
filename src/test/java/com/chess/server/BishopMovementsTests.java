@@ -15,7 +15,7 @@ public class BishopMovementsTests extends TestCase {
 
     @Test
     public void testStandardAvaiableMovements(){
-       Bishop bishop = new Bishop(new Point(4,4));
+       Bishop bishop = new Bishop(new Point(4,4), false);
 
         List<Point> expectedPoints = new ArrayList<Point>(
                 Arrays.asList(
@@ -47,7 +47,7 @@ public class BishopMovementsTests extends TestCase {
 
     @Test
     public void testLeftUpCornerAvailableMovements(){
-        Bishop bishop = new Bishop(new Point(0,0));
+        Bishop bishop = new Bishop(new Point(0,0), false);
 
         List<Point> expectedPoints = new ArrayList<Point>(
                 Arrays.asList(
@@ -73,7 +73,7 @@ public class BishopMovementsTests extends TestCase {
 
     @Test
     public void testRightUpCornerAvailableMovements(){
-        Bishop bishop = new Bishop(new Point(7,0));
+        Bishop bishop = new Bishop(new Point(7,0), false);
 
         List<Point> expectedPoints = new ArrayList<Point>(
                 Arrays.asList(

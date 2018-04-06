@@ -16,7 +16,7 @@ public class RookMovementsTests extends TestCase {
 
     @Test
     public void testStandardMovements(){
-        Rook rook = new Rook(new Point(4, 4));
+        Rook rook = new Rook(new Point(4, 4), false);
 
         List<Point> expectedPoints = new ArrayList<Point>(
                 Arrays.asList(
@@ -51,7 +51,7 @@ public class RookMovementsTests extends TestCase {
 
     @Test
     public void testLeftUpCorner(){
-        Rook rook = new Rook(new Point(0, 0));
+        Rook rook = new Rook(new Point(0, 0), false);
 
         List<Point> expectedPoints = new ArrayList<Point>(
                 Arrays.asList(

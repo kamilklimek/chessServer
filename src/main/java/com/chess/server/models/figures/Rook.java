@@ -7,8 +7,8 @@ import com.chess.server.models.Point;;
 
 public class Rook extends Figure {
 
-    public Rook(Point point){
-        super(point, "ROOK");
+    public Rook(Point point, boolean isWhite){
+        super(point, "ROOK", isWhite);
     }
 
 }

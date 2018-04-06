@@ -6,8 +6,8 @@ import com.chess.server.models.Point;
 
 public class Queen extends Figure {
 
-    public Queen(Point point){
-        super(point, "QUEEN");
+    public Queen(Point point, boolean isWhite){
+        super(point, "QUEEN", isWhite);
     }
 
 }

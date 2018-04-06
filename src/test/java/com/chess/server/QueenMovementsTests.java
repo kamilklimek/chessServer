@@ -16,7 +16,7 @@ public class QueenMovementsTests extends TestCase {
 
     @Test
     public void testLeftUpCorner(){
-        Queen queen = new Queen(new Point(0, 0));
+        Queen queen = new Queen(new Point(0, 0), false);
 
         List<Point> expectedPoints = new ArrayList<Point>(
                 Arrays.asList(

@@ -7,10 +7,19 @@ public class Figure {
     protected Point position;
     protected String typeOfFigure;
     protected List<Point> availableMovements;
+    protected boolean isWhite;
+
+    public Figure(Point position, String typeOfFigure, boolean isWhite){
+        this.position = position;
+        this.typeOfFigure = typeOfFigure;
+        this.isWhite = isWhite;
+        availableMovements = new ArrayList<Point>();
+    }
 
     public Figure(Point position, String typeOfFigure){
         this.position = position;
         this.typeOfFigure = typeOfFigure;
+        isWhite = false;
         availableMovements = new ArrayList<Point>();
     }
 
@@ -213,5 +222,15 @@ public class Figure {
     public int hashCode() {
 
         return Objects.hash(position, typeOfFigure, availableMovements);
+    }
+
+    @Override
+    public String toString(){
+        String result = "";
+
+        result += "Pozycja: " + position.toString() + ", typ: " + typeOfFigure + ", kolor: " + isWhite;
+
+        return result;
+
     }
 }

@@ -15,7 +15,7 @@ public class KnightMovementsTests extends TestCase{
 
     @Test
     public void testStandardKnightMovements(){
-        Knight knight = new Knight(new Point(4,4));
+        Knight knight = new Knight(new Point(4,4), false);
 
         List<Point> expectedPoints = new ArrayList<Point>(
                 Arrays.asList(
@@ -45,7 +45,7 @@ public class KnightMovementsTests extends TestCase{
 
     @Test
     public void testLeftUpCornerKnightMovements(){
-        Knight knight = new Knight(new Point(0,0));
+        Knight knight = new Knight(new Point(0,0), false);
 
         List<Point> expectedPoints = new ArrayList<Point>(
                 Arrays.asList(
@@ -69,7 +69,7 @@ public class KnightMovementsTests extends TestCase{
 
     @Test
     public void testInLeftMiddleMovements(){
-        Knight knight = new Knight(new Point(0,3));
+        Knight knight = new Knight(new Point(0,3), false);
 
         List<Point> expectedPoints = new ArrayList<Point>(
                 Arrays.asList(

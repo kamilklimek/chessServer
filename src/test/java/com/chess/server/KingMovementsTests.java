@@ -12,7 +12,7 @@ public class KingMovementsTests extends TestCase {
 
     @Test
     public void testNormalAvailableMovements(){
-        King king = new King(new Point(5,5));
+        King king = new King(new Point(5,5), false);
 
         List<Point> expectedPoints = new ArrayList<Point>(
                 Arrays.asList(
@@ -40,7 +40,7 @@ public class KingMovementsTests extends TestCase {
 
     @Test
     public void testInDownLeftCornerAvaiableMovements(){
-        King king = new King(new Point(0, 0));
+        King king = new King(new Point(0, 0), false);
 
         List<Point> expectedPoints = new ArrayList<Point>(
                 Arrays.asList(
@@ -63,7 +63,7 @@ public class KingMovementsTests extends TestCase {
 
     @Test
     public void testInDownRightCornerAvaiableMovements(){
-        King king = new King(new Point(7, 0));
+        King king = new King(new Point(7, 0), false);
 
         List<Point> expectedPoints = new ArrayList<Point>(
                 Arrays.asList(
@@ -85,7 +85,7 @@ public class KingMovementsTests extends TestCase {
 
     @Test
     public void testInUpRightCornerAvaiableMovements(){
-        King king = new King(new Point(7, 7));
+        King king = new King(new Point(7, 7), false);
 
         List<Point> expectedPoints = new ArrayList<Point>(
                 Arrays.asList(
@@ -107,7 +107,7 @@ public class KingMovementsTests extends TestCase {
 
     @Test
     public void testInLeftUpCornerAvaiableMovements(){
-        King king = new King(new Point(0, 7));
+        King king = new King(new Point(0, 7), false);
 
         List<Point> expectedPoints = new ArrayList<Point>(
                 Arrays.asList(

@@ -10,11 +10,9 @@ import java.util.List;
 
 public class Pawn extends Figure {
 
-    private boolean isWhite;
 
     public Pawn(Point point, boolean isWhite) {
-        super(point, "PAWN");
-        this.isWhite = isWhite;
+        super(point, "PAWN", isWhite);
     }
 
     @Override
@@ -68,4 +66,6 @@ public class Pawn extends Figure {
 
         return movements;
     }
+
+
 }

@@ -6,7 +6,7 @@ import com.chess.server.models.Point;
 
 public class Bishop extends Figure {
 
-    public Bishop(Point position){
-        super(position, "BISHOP");
+    public Bishop(Point position, boolean isWhite){
+        super(position, "BISHOP", isWhite);
     }
 }

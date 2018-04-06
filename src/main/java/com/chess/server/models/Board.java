@@ -21,6 +21,17 @@ public class Board {
         nameFile = fileName;
         initGameFromFile(nameFile);
     }
+    public void displayAllFigures(){
+
+        System.out.println("All figures: ");
+        for(Figure[] figures : boardFields){
+            for(Figure figure : figures){
+                System.out.println(figure.toString());
+            }
+        }
+
+
+    }
 
     private void initGameFromFile(String fileName){
         try {
@@ -40,18 +51,24 @@ public class Board {
                     boolean isEmpty = line.charAt(j) == 'X';
                     boolean isBishop = line.charAt(j) == 'B';
 
+                    boolean isWhite = true;
+                    if(i>4)
+                        isWhite = false;
+
+
                     if(isBishop){
-                        boardFields[i][j] = new Bishop(new Point(j, i));
+                        boardFields[i][j] = new Bishop(new Point(j, i), isWhite);
                     }else if(isRook){
-                        boardFields[i][j] = new Rook(new Point(j, i));
+                        boardFields[i][j] = new Rook(new Point(j, i), isWhite);
                     }else if(isKing){
-                        boardFields[i][j] = new King(new Point(j, i));
+                        boardFields[i][j] = new King(new Point(j, i), isWhite);
                     }else if(isPawn){
-                        boardFields[i][j] = new Pawn(new Point(j, i), true);
+
+                        boardFields[i][j] = new Pawn(new Point(j, i), isWhite);
                     }else if(isQueen){
-                        boardFields[i][j] = new Queen(new Point(j, i));
+                        boardFields[i][j] = new Queen(new Point(j, i), isWhite);
                     }else if(isKnight){
-                        boardFields[i][j] = new Knight(new Point(j, i));
+                        boardFields[i][j] = new Knight(new Point(j, i), isWhite);
                     }else if(isEmpty){
                         boardFields[i][j] = new Figure(new Point(j, i), "EMPTY");
                     }

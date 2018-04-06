@@ -6,7 +6,7 @@ import com.chess.server.models.Point;
 
 public class Knight extends Figure {
 
-    public Knight(Point position) {
-        super(position, "KNIGHT");
+    public Knight(Point position, boolean isWhite) {
+        super(position, "KNIGHT", isWhite);
     }
 }
