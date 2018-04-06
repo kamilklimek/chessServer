@@ -5,9 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * Created by kamil.klimek on 20.03.2018.
- */
 public class Figure {
 
     protected Point position;
@@ -70,12 +67,12 @@ public class Figure {
         for(int i=0;i<8;i++){
             for(int j=0;j<8;j++){
 
-                boolean movementIsNotTheSamePosition = i+bishopPositionX != bishopPositionX && j+bishopPositionY != bishopPositionY;
+                boolean movementIsNotTheSamePosition = j != bishopPositionX && i != bishopPositionY;
                 boolean movementsOnDiagonal = i+bishopPositionX == j+bishopPositionY;
-                boolean movementsIsOnReversedDiagonal = true;
+                boolean movementsIsOnReversedDiagonal = bishopPositionX - j == i - bishopPositionY;
 
-                if(movementsOnDiagonal || movementsIsOnReversedDiagonal && movementIsNotTheSamePosition ){
-                    Point point = new Point(i, j);
+                if( (movementsOnDiagonal || movementsIsOnReversedDiagonal ) && movementIsNotTheSamePosition ){
+                    Point point = new Point(j, i);
                     movements.add(point);
                 }
 
@@ -89,6 +86,24 @@ public class Figure {
 
     private List<Point> calculateRookMovements(){
         List<Point> movements = new ArrayList<Point>();
+
+        int rookPositionX = position.getPositionX();
+        int rookPositionY = position.getPositionY();
+
+        for(int i=0;i<8;i++){
+            for(int j=0;j<8;j++){
+                boolean pointsHorizontally = i == rookPositionY && j != rookPositionX;
+                boolean pointsVertically = j == rookPositionX && i != rookPositionY;
+
+                if(pointsHorizontally || pointsVertically){
+                    Point point = new Point(j, i);
+                    movements.add(point);
+
+                }
+
+
+            }
+        }
 
         return movements;
     }
@@ -113,7 +128,7 @@ public class Figure {
 
         for(int i=kingPositionX-1;i<=kingPositionX+1;i++){
             for(int j=kingPositionY-1;j<=kingPositionY+1;j++){
-                if(i < 0 || j < 0 || j > 8 || i > 8 || ( i == kingPositionX && j == kingPositionY)){
+                if(i < 0 || j < 0 || j >= 8 || i >= 8 || ( i == kingPositionX && j == kingPositionY)){
                     continue;
                 }
                 Point point = new Point(i, j);

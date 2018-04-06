@@ -15,7 +15,7 @@ public class BishopMovementsTests extends TestCase {
 
     @Test
     public void testStandardAvaiableMovements(){
-       /* Bishop bishop = new Bishop(new Point(4,4));
+       Bishop bishop = new Bishop(new Point(4,4));
 
         List<Point> expectedPoints = new ArrayList<Point>(
                 Arrays.asList(
@@ -26,14 +26,12 @@ public class BishopMovementsTests extends TestCase {
                         new Point(5,5),
                         new Point(6,6),
                         new Point(7,7),
-                        new Point(0,8),
                         new Point(1,7),
                         new Point(2,6),
                         new Point(3,5),
                         new Point(5,3),
                         new Point(6,2),
-                        new Point(7,1),
-                        new Point(8,0)
+                        new Point(7,1)
                 )
         );
 
@@ -44,8 +42,62 @@ public class BishopMovementsTests extends TestCase {
         Collections.sort(pointsFromBishop, new PointComparator());
 
 
-        assertEquals(expectedPoints, pointsFromBishop);*/
+        assertEquals(expectedPoints, pointsFromBishop);
     }
+
+    @Test
+    public void testLeftUpCornerAvailableMovements(){
+        Bishop bishop = new Bishop(new Point(0,0));
+
+        List<Point> expectedPoints = new ArrayList<Point>(
+                Arrays.asList(
+                        new Point(1,1),
+                        new Point(2,2),
+                        new Point(3,3),
+                        new Point(4,4),
+                        new Point(5,5),
+                        new Point(6,6),
+                        new Point(7,7)
+                )
+        );
+
+        bishop.calculateAllAvailableMovements();
+        List<Point> pointsFromBishop = bishop.getAvailableMovements();
+
+        Collections.sort(expectedPoints, new PointComparator());
+        Collections.sort(pointsFromBishop, new PointComparator());
+
+
+        assertEquals(expectedPoints, pointsFromBishop);
+    }
+
+    @Test
+    public void testRightUpCornerAvailableMovements(){
+        Bishop bishop = new Bishop(new Point(7,0));
+
+        List<Point> expectedPoints = new ArrayList<Point>(
+                Arrays.asList(
+                        new Point(6, 1),
+                        new Point(5, 2),
+                        new Point(4, 3),
+                        new Point(3, 4),
+                        new Point(2, 5),
+                        new Point(1, 6),
+                        new Point(0, 7)
+                )
+        );
+
+        bishop.calculateAllAvailableMovements();
+        List<Point> pointsFromBishop = bishop.getAvailableMovements();
+
+        Collections.sort(expectedPoints, new PointComparator());
+        Collections.sort(pointsFromBishop, new PointComparator());
+
+
+        assertEquals(expectedPoints, pointsFromBishop);
+    }
+
+
 
 
 }
