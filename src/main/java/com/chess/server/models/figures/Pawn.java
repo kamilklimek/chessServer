@@ -32,7 +32,7 @@ public class Pawn extends Figure {
         ));
 
         //jezeli pionek ruszyl sie ze swojej pozycji to usun z maski mozliwosc ruchu o 2
-        if((pawnPositionY > 2 && isWhite) || (!isWhite && pawnPositionX < 6)){
+        if((pawnPositionY > 1 && isWhite) || (!isWhite && pawnPositionY < 6)){
             mask.remove(new Point(0,2));
         }
 
