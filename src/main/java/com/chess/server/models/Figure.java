@@ -1,9 +1,6 @@
 package com.chess.server.models;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Figure {
 
@@ -111,6 +108,14 @@ public class Figure {
     private List<Point> calculateQueenMovements(){
         List<Point> movements = new ArrayList<Point>();
 
+
+        for(int i=0;i<8;i++){
+            for(int j=0;j<8;j++){
+                movements.add(new Point(j,i));
+            }
+
+        }
+
         return movements;
     }
 
@@ -145,6 +150,39 @@ public class Figure {
         int knightPositionX = position.getPositionX();
         int knightPositionY = position.getPositionY();
 
+        List<Point> mask = new ArrayList<>(Arrays.asList(
+                new Point(-2,-1),
+                new Point(-2,1),
+                new Point(-1,2),
+                new Point(1,2),
+                new Point(2,1),
+                new Point(2,-1),
+                new Point(1,-2),
+                new Point(-1,-2)
+        ));
+
+
+        for(int i=0;i<8;i++){
+            for(int j=0;j<8;j++){
+
+                for (Point point: mask
+                     ) {
+                    int pointX = point.getPositionX();
+                    int pointY = point.getPositionY();
+
+                    boolean equalsToXMask = knightPositionX + pointX == j;
+                    boolean equalsToYMask = knightPositionY + pointY == i;
+
+                    if(equalsToXMask && equalsToYMask ){
+                        movements.add(new Point(j,i));
+                    }
+
+
+
+                }
+
+            }
+        }
 
 
         return movements;
