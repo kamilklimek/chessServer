@@ -1,5 +1,6 @@
 package com.chess.server.models;
 
+import com.chess.server.comparators.PointComparator;
 import com.chess.server.models.figures.*;
 
 import java.io.*;
@@ -93,8 +94,8 @@ public class Board {
 
     }
 
-    public List<Point> getAllAvaiableMovements(Point point){
-        List<Point> avaiableMovements = new LinkedList<>();
+    public List<Point> getAvailableMovements(Point point){
+        List<Point> availableMovements = new LinkedList<>();
 
         int positionX = point.getPositionX();
         int positionY = point.getPositionY();
@@ -104,6 +105,10 @@ public class Board {
 
         List<Point> movements = figure.getAvailableMovements();
 
+
+        /*
+        Zrobić fabrykę do sprawdzania mozliwosci ruchow dla figur - uwzgledniajac kolizje i nie uwzgledniajac dla ruchów konia
+         */
         for(Point p : movements){
 
             int x = p.getPositionX();
@@ -113,11 +118,11 @@ public class Board {
             boolean fieldIsEmpty = boardFields[y][x].typeOfFigure == "EMPTY";
 
             if(figureIsNotTheSameColor || fieldIsEmpty)
-                avaiableMovements.add(new Point(x,y));
+                availableMovements.add(new Point(x,y));
 
         }
 
-        return avaiableMovements;
+        return availableMovements;
 
 
     }

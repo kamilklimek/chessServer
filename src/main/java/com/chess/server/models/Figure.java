@@ -14,6 +14,7 @@ public class Figure {
         this.typeOfFigure = typeOfFigure;
         this.isWhite = isWhite;
         availableMovements = new ArrayList<Point>();
+        calculateAllAvailableMovements();
     }
 
     public Figure(Point position, String typeOfFigure){
@@ -21,6 +22,7 @@ public class Figure {
         this.typeOfFigure = typeOfFigure;
         isWhite = false;
         availableMovements = new ArrayList<Point>();
+        calculateAllAvailableMovements();
     }
 
     public Point getPosition() {
