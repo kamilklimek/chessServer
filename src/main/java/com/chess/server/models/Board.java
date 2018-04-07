@@ -3,6 +3,8 @@ package com.chess.server.models;
 import com.chess.server.models.figures.*;
 
 import java.io.*;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Board {
 
@@ -21,18 +23,6 @@ public class Board {
         nameFile = fileName;
         initGameFromFile(nameFile);
     }
-    public void displayAllFigures(){
-
-        System.out.println("All figures: ");
-        for(Figure[] figures : boardFields){
-            for(Figure figure : figures){
-                System.out.println(figure.toString());
-            }
-        }
-
-
-    }
-
     private void initGameFromFile(String fileName){
         try {
             FileReader fileReader = new FileReader(fileName);
@@ -103,6 +93,40 @@ public class Board {
 
     }
 
+    public List<Point> getAllAvaiableMovements(Point point){
+        List<Point> avaiableMovements = new LinkedList<>();
+
+        int positionX = point.getPositionX();
+        int positionY = point.getPositionY();
+
+        Figure figure = boardFields[positionY][positionX];
+        boolean figureIsWhite = figure.isWhite;
+
+        List<Point> movements = figure.getAvailableMovements();
+
+        for(Point p : movements){
+
+            int x = p.getPositionX();
+            int y = p.getPositionY();
+
+            boolean figureIsNotTheSameColor = boardFields[y][x].isWhite != figureIsWhite;
+            boolean fieldIsEmpty = boardFields[y][x].typeOfFigure == "EMPTY";
+
+            if(figureIsNotTheSameColor || fieldIsEmpty)
+                avaiableMovements.add(new Point(x,y));
+
+        }
+
+        return avaiableMovements;
+
+
+    }
+
+
+    /*
+    Displays methods
+     */
+
     public void display(){
         for(int i=0;i<8;i++){
             for(int j=0;j<8;j++){
@@ -134,4 +158,18 @@ public class Board {
         }
 
     }
+
+
+    public void displayAllFigures(){
+
+        System.out.println("All figures: ");
+        for(Figure[] figures : boardFields){
+            for(Figure figure : figures){
+                System.out.println(figure.toString());
+            }
+        }
+
+
+    }
+
 }
