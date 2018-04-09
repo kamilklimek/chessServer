@@ -6,58 +6,65 @@ import com.chess.server.models.figures.Bishop;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 
 public class App 
 {
     public static void main( String[] args ) {
 
-       Board board = new Board();
-        board.displayAllFigures();
+        Scanner in = new Scanner(System.in);
+        Board board = new Board();
+        List<Figure> figures;
+        boolean turnWhitePlayer = true;
+        while(true){
+            board.display();
 
-       System.out.println();
+            figures = turnWhitePlayer ?  board.getAllWhiteFigures() : board.getAllBlackFigures();
 
-       // board.moveFigure(new Point(0,0), new Point(0,3));
-        //board.moveFigure(new Point(4,0), new Point(4, 4));
-
-        board.display();
-
-        PointComparator pointComparator = new PointComparator();
-        /*Bishop bishop = new Bishop(new Point(0, 0), true);
-        List<Point> getAllPoints = bishop.getAvailableMovements();
-
-        List<Point> newListPoints = new ArrayList<>();
-
-        for(Point point : getAllPoints){
-            if(pointComparator.compare(point, new Point(3,3)) < 0){
-                newListPoints.add(point);
+            System.out.println("Wszystkie twoje figury i ich pozycje: ");
+            for (Figure figure : figures
+                 ) {
+                System.out.println(figure.getPosition() + ", " + figure.getTypeOfFigure());
             }
 
+            int x, y;
+            int destinationX, destinationY;
+
+            while(true){
+
+                System.out.println("Skad [x]: " );
+                x = in.nextInt();
+
+                System.out.println("Skad [Y]: " );
+                y = in.nextInt();
+
+                System.out.println("Dokad [x]: " );
+                destinationX = in.nextInt();
+
+                System.out.println("Dokad [y]: " );
+                destinationY = in.nextInt();
+
+                boolean moved = board.moveFigure(new Point(x,y), new Point(destinationX, destinationY)) == 0;
+                boolean movedAndBeatenUp = board.moveFigure(new Point(x,y), new Point(destinationX, destinationY)) == 1;
+                boolean cantMove = board.moveFigure(new Point(x,y), new Point(destinationX, destinationY)) == -1;
+
+                if(moved){
+                    System.out.println("Udalo sie przesunac. ");
+                    break;
+                }else if(movedAndBeatenUp){
+                    System.out.println("Udalo sie przesunac i zbic");
+                    break;
+                }else if(cantMove){
+                    System.out.println("Nie mozesz sie tam ruszyc");
+                }
+
+            }
+
+
+            turnWhitePlayer = !turnWhitePlayer;
+
         }
-
-
-        System.out.println("==== ALL POINTS ==== ");
-        for (Point point : getAllPoints){
-            System.out.println(point.toString());
-        }
-
-        System.out.println("==== NEWs POINTS ==== ");
-        for (Point point : newListPoints){
-            System.out.println(point.toString());
-        }*/
-
-
-        System.out.println("==== COMPARING POINTS ==== ");
-        System.out.println("[4,1] > [5,0] " + pointComparator.compare(new Point(4,1), new Point(5,0)));
-        System.out.println("[3,1] > [3,0] " + pointComparator.compare(new Point(3,1), new Point(3,0)));
-        System.out.println("[2,1] > [1,0] " + pointComparator.compare(new Point(2,1), new Point(1,0)));
-        System.out.println("[1,2] > [0,2] " + pointComparator.compare(new Point(1,2), new Point(0,2)));
-
-
-        System.out.println("[5,2] > [6,2] " + pointComparator.compare(new Point(5,2), new Point(6,2)));
-        System.out.println("[1,4] > [0,5] " + pointComparator.compare(new Point(1,4), new Point(0,5)));
-        System.out.println("[5,4] > [6,5] " + pointComparator.compare(new Point(5,4), new Point(6,5)));
-        System.out.println("[3,5] > [3,6] " + pointComparator.compare(new Point(3,5), new Point(3,6)));
 
     }
 }

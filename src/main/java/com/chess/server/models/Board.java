@@ -126,6 +126,29 @@ public class Board {
         return getAvailableMovements(from).contains(to);
     }
 
+    public List<Figure> getAllWhiteFigures(){
+        return getAllFiguresByColor(true);
+    }
+
+    public List<Figure> getAllBlackFigures(){
+        return getAllFiguresByColor(false);
+    }
+
+    private List<Figure> getAllFiguresByColor(boolean isWhite){
+        List<Figure> figures = new LinkedList<>();
+
+        for(int i=0;i<8;i++){
+            for(int j=0;j<8;j++){
+                boolean isTheSameColor = boardFields[j][i].isWhite == isWhite;
+                boolean notEmpty = boardFields[j][i].typeOfFigure != "EMPTY";
+                if(isTheSameColor && notEmpty)
+                    figures.add(boardFields[j][i]);
+            }
+        }
+
+        return figures;
+    }
+
     /**
      * Function calculate (with exclusion points) available point
      * where figure can move
@@ -183,8 +206,9 @@ public class Board {
             int positionX = mask.getPositionX() + figure.position.getPositionX();
             int positionY = mask.getPositionY() + figure.position.getPositionY();
 
-            boolean maskPointIsEmpty = boardFields[positionY][positionX].typeOfFigure == "EMPTY";
-            boolean listContainsPointMask = resultPoints.contains(new Point(positionX, positionY));
+            boolean positionHigherThanZero = positionX >= 0 && positionX <= 7 && positionY >= 0 && positionY <=7;
+            boolean maskPointIsEmpty = positionHigherThanZero && boardFields[positionY][positionX].typeOfFigure == "EMPTY";
+            boolean listContainsPointMask = positionHigherThanZero && resultPoints.contains(new Point(positionX, positionY));
 
             if(maskPointIsEmpty && listContainsPointMask){
                 resultPoints.remove(new Point(positionX, positionY));
