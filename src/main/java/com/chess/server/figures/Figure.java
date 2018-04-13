@@ -1,4 +1,4 @@
-package com.chess.server.models;
+package com.chess.server.figures;
 
 import java.util.*;
 
@@ -39,6 +39,10 @@ public class Figure {
 
     public List<Point> getAvailableMovements() {
         return availableMovements;
+    }
+
+    public boolean isWhite() {
+        return isWhite;
     }
 
     public void calculateAllAvailableMovements(){

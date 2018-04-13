@@ -1,8 +1,5 @@
-package com.chess.server.models.figures;
+package com.chess.server.figures;
 
-
-import com.chess.server.models.Figure;
-import com.chess.server.models.Point;
 
 public class Bishop extends Figure {
 

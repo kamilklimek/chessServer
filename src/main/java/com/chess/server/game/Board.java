@@ -1,7 +1,9 @@
-package com.chess.server.models;
+package com.chess.server.game;
 
+import com.chess.server.figures.Figure;
+import com.chess.server.figures.Point;
 import com.chess.server.comparators.PointComparator;
-import com.chess.server.models.figures.*;
+import com.chess.server.figures.*;
 
 import java.io.*;
 import java.util.Arrays;
@@ -11,7 +13,7 @@ import java.util.List;
 
 public class Board {
 
-    private Figure [][]boardFields;
+    private Figure[][]boardFields;
     private String nameFile;
 
 
@@ -105,7 +107,7 @@ public class Board {
        boolean canMove = canMove(from, to);
 
         if(canMove){
-            boolean figureIsBeatenUp = boardFields[toY][toX].typeOfFigure != "EMPTY";
+            boolean figureIsBeatenUp = boardFields[toY][toX].getTypeOfFigure() != "EMPTY";
 
             boardFields[toY][toX] = boardFields[fromY][fromX];
             boardFields[fromY][fromX] = new Figure(from, "EMPTY");
@@ -139,8 +141,8 @@ public class Board {
 
         for(int i=0;i<8;i++){
             for(int j=0;j<8;j++){
-                boolean isTheSameColor = boardFields[j][i].isWhite == isWhite;
-                boolean notEmpty = boardFields[j][i].typeOfFigure != "EMPTY";
+                boolean isTheSameColor = boardFields[j][i].isWhite() == isWhite;
+                boolean notEmpty = boardFields[j][i].getTypeOfFigure() != "EMPTY";
                 if(isTheSameColor && notEmpty)
                     figures.add(boardFields[j][i]);
             }
@@ -163,10 +165,10 @@ public class Board {
         int positionY = point.getPositionY();
 
         Figure figure = boardFields[positionY][positionX];
-        boolean figureIsWhite = figure.isWhite;
-        boolean figureIsKing = figure.typeOfFigure == "KING";
-        boolean figureIsKnight = figure.typeOfFigure == "KNIGHT";
-        boolean figureIsPawn = figure.typeOfFigure == "PAWN";
+        boolean figureIsWhite = figure.isWhite();
+        boolean figureIsKing = figure.getTypeOfFigure() == "KING";
+        boolean figureIsKnight = figure.getTypeOfFigure() == "KNIGHT";
+        boolean figureIsPawn = figure.getTypeOfFigure() == "PAWN";
 
         List<Point> pseudoMovements = figure.getAvailableMovements();
 
@@ -193,7 +195,7 @@ public class Board {
                 new Point(1, 1)
         ));
 
-        boolean figureIsBlack = !figure.isWhite;
+        boolean figureIsBlack = !figure.isWhite();
 
         if(figureIsBlack){
             for (Point p :pawnBeatenUpMask
@@ -203,11 +205,11 @@ public class Board {
         }
 
         for(Point mask : pawnBeatenUpMask){
-            int positionX = mask.getPositionX() + figure.position.getPositionX();
-            int positionY = mask.getPositionY() + figure.position.getPositionY();
+            int positionX = mask.getPositionX() + figure.getPosition().getPositionX();
+            int positionY = mask.getPositionY() + figure.getPosition().getPositionY();
 
             boolean positionHigherThanZero = positionX >= 0 && positionX <= 7 && positionY >= 0 && positionY <=7;
-            boolean maskPointIsEmpty = positionHigherThanZero && boardFields[positionY][positionX].typeOfFigure == "EMPTY";
+            boolean maskPointIsEmpty = positionHigherThanZero && boardFields[positionY][positionX].getTypeOfFigure() == "EMPTY";
             boolean listContainsPointMask = positionHigherThanZero && resultPoints.contains(new Point(positionX, positionY));
 
             if(maskPointIsEmpty && listContainsPointMask){
@@ -227,8 +229,8 @@ public class Board {
             int pY = p.getPositionY();
 
             Figure checkingFigure = boardFields[pY][pX];
-            boolean isNotEmpty = checkingFigure.typeOfFigure != "EMPTY";
-            boolean isTheSameColor = checkingFigure.isWhite == figureIsWhite;
+            boolean isNotEmpty = checkingFigure.getTypeOfFigure() != "EMPTY";
+            boolean isTheSameColor = checkingFigure.isWhite() == figureIsWhite;
 
             if(isNotEmpty && isTheSameColor){
                 it.remove();

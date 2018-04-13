@@ -1,8 +1,8 @@
 package com.chess.server;
 
 import com.chess.server.comparators.PointComparator;
-import com.chess.server.models.Point;
-import com.chess.server.models.figures.Knight;
+import com.chess.server.figures.Knight;
+import com.chess.server.figures.Point;
 import junit.framework.TestCase;
 import org.junit.jupiter.api.Test;
 

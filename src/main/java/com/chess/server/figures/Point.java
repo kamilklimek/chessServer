@@ -1,4 +1,4 @@
-package com.chess.server.models;
+package com.chess.server.figures;
 
 /**
  * Created by kamil.klimek on 20.03.2018.

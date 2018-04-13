@@ -1,6 +1,6 @@
 package com.chess.server.comparators;
 
-import com.chess.server.models.Point;
+import com.chess.server.figures.Point;
 
 import java.util.Comparator;
 
