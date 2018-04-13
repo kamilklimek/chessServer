@@ -26,8 +26,10 @@ public class ChessCheckMate {
 
                 for (Point position: figureMovements
                      ) {
-                    boolean kingPositionSumFigurePosition = king.getPosition() == position;
-                    if(kingPositionSumFigurePosition){
+                    boolean kingXSumFigurePosition = king.getPosition().getPositionX() == position.getPositionY();
+                    boolean kingYSumFigurePosition = king.getPosition().getPositionY() == position.getPositionY();
+
+                    if(kingXSumFigurePosition && kingYSumFigurePosition){
                         return true;
                     }
                 }
@@ -41,6 +43,7 @@ public class ChessCheckMate {
     }
 
     private Figure findKingByColor(boolean isWhite){
+
         for (Figure[] row:boardFigures
                 ) {
             for (Figure figure:row
@@ -49,8 +52,9 @@ public class ChessCheckMate {
                 boolean kingColor = figure.isWhite() == isWhite;
                 boolean isKing = figure.getTypeOfFigure() == "KING";
 
-                if(isKing && isWhite);
+                if(isKing && isWhite){
                     return figure;
+                }
 
             }
         }

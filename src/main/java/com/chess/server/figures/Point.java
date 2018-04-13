@@ -1,35 +1,37 @@
 package com.chess.server.figures;
 
+import java.util.Objects;
+
 /**
  * Created by kamil.klimek on 20.03.2018.
  */
 public class Point {
 
-    private Integer positionX;
-    private Integer positionY;
+    private int positionX;
+    private int positionY;
 
-    public Point(Integer x, Integer y){
+    public Point(int x, int y){
         this.positionX = x;
         this.positionY = y;
     }
 
-    public Integer getPositionX(){
+    public int getPositionX(){
         return positionX;
     }
 
-    public Integer getPositionY(){
+    public int getPositionY(){
         return positionY;
     }
 
-    public Integer[] getPosition(){
-        return new Integer[]{positionX, positionY};
+    public int[] getPosition(){
+        return new int[]{positionX, positionY};
     }
 
-    public void setPositionX(Integer positionX) {
+    public void setPositionX(int positionX) {
         this.positionX = positionX;
     }
 
-    public void setPositionY(Integer positionY) {
+    public void setPositionY(int positionY) {
         this.positionY = positionY;
     }
 
@@ -37,21 +39,16 @@ public class Point {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Point point = (Point) o;
-
-        if (positionX != null ? !positionX.equals(point.positionX) : point.positionX != null) return false;
-        return positionY != null ? positionY.equals(point.positionY) : point.positionY == null;
+        return positionX == point.positionX &&
+                positionY == point.positionY;
     }
 
     @Override
     public int hashCode() {
-        int result = positionX != null ? positionX.hashCode() : 0;
-        result = 31 * result + (positionY != null ? positionY.hashCode() : 0);
-        return result;
+
+        return Objects.hash(positionX, positionY);
     }
-
-
 
     @Override
     public String toString() {

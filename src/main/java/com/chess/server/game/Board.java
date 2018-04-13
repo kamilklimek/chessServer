@@ -30,6 +30,7 @@ public class Board {
     private void init(){
         boardFields = new Figure[8][8];
         chessAvailableMovements = new ChessAvailableMovements(boardFields);
+        chessCheckMate = new ChessCheckMate(boardFields);
         initGameFromFile(nameFile);
     }
 
@@ -158,6 +159,10 @@ public class Board {
 
     public List<Point> getAvailableMovements(Point point){
         return chessAvailableMovements.getAvailableMovements(point);
+    }
+
+    public boolean checkMate(boolean isWhite){
+        return chessCheckMate.checkIsMate(isWhite);
     }
 
     /*
