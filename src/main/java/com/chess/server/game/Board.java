@@ -6,7 +6,6 @@ import com.chess.server.comparators.PointComparator;
 import com.chess.server.figures.*;
 
 import java.io.*;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,16 +14,19 @@ public class Board {
 
     private Figure[][]boardFields;
     private String nameFile;
+    private ChessExclusiveMovements chessExclusiveMovements;
 
 
     public Board() {
         boardFields = new Figure[8][8];
         nameFile = "boards/standard.game";
+        chessExclusiveMovements = new ChessExclusiveMovements(boardFields);
         initGameFromFile(nameFile);
     }
 
     public Board(String fileName) {
         boardFields = new Figure[8][8];
+        chessExclusiveMovements = new ChessExclusiveMovements(boardFields);
         nameFile = fileName;
         initGameFromFile(nameFile);
     }
@@ -160,123 +162,25 @@ public class Board {
      */
 
     public List<Point> getAvailableMovements(Point point) {
-
         int positionX = point.getPositionX();
         int positionY = point.getPositionY();
 
         Figure figure = boardFields[positionY][positionX];
         boolean figureIsWhite = figure.isWhite();
-        boolean figureIsKing = figure.getTypeOfFigure() == "KING";
-        boolean figureIsKnight = figure.getTypeOfFigure() == "KNIGHT";
-        boolean figureIsPawn = figure.getTypeOfFigure() == "PAWN";
 
         List<Point> pseudoMovements = figure.getAvailableMovements();
-
         List<Point> allFiguresInPseudoMovements = getAllFiguresFromPointList(pseudoMovements);
-        List<Point> movementsWithAllyFigures = pseudoMovements;
 
-        if(!(figureIsKing || figureIsKnight)){
-            movementsWithAllyFigures = exclusiveUnAvailablePoint(figure, pseudoMovements, allFiguresInPseudoMovements);
-        }
-
-        List<Point> availableMovements = exclusiveAllAllyFigures(figureIsWhite, movementsWithAllyFigures);
-
-        if(figureIsPawn){
-            availableMovements = exclusiveBeatenUp(figure, availableMovements);
-        }
+        List<Point> movementsWithAllyFigures = chessExclusiveMovements.exclusiveUnAvailablePoint(figure, pseudoMovements, allFiguresInPseudoMovements);
+        List<Point> availableMovements = chessExclusiveMovements.exclusiveAllyFigures(figureIsWhite, movementsWithAllyFigures);
+        availableMovements = chessExclusiveMovements.exclusivePawnBeatenUp(figure, availableMovements);
 
         return availableMovements;
     }
 
-    private List<Point> exclusiveBeatenUp(Figure figure, List<Point> availableMovements) {
-        List<Point> resultPoints = availableMovements;
-        List<Point> pawnBeatenUpMask = new LinkedList<>(Arrays.asList(
-                new Point(-1, 1),
-                new Point(1, 1)
-        ));
-
-        boolean figureIsBlack = !figure.isWhite();
-
-        if(figureIsBlack){
-            for (Point p :pawnBeatenUpMask
-                 ) {
-                p.setPositionY(p.getPositionY()*-1);
-            }
-        }
-
-        for(Point mask : pawnBeatenUpMask){
-            int positionX = mask.getPositionX() + figure.getPosition().getPositionX();
-            int positionY = mask.getPositionY() + figure.getPosition().getPositionY();
-
-            boolean positionHigherThanZero = positionX >= 0 && positionX <= 7 && positionY >= 0 && positionY <=7;
-            boolean maskPointIsEmpty = positionHigherThanZero && boardFields[positionY][positionX].getTypeOfFigure() == "EMPTY";
-            boolean listContainsPointMask = positionHigherThanZero && resultPoints.contains(new Point(positionX, positionY));
-
-            if(maskPointIsEmpty && listContainsPointMask){
-                resultPoints.remove(new Point(positionX, positionY));
-            }
-
-        }
-        return resultPoints;
-    }
-
-    private List<Point> exclusiveAllAllyFigures(boolean figureIsWhite, List<Point> movementsWithAllyFigures) {
-
-        for(Iterator<Point> it = movementsWithAllyFigures.iterator(); it.hasNext();){
-            Point p = (Point) it.next();
-
-            int pX = p.getPositionX();
-            int pY = p.getPositionY();
-
-            Figure checkingFigure = boardFields[pY][pX];
-            boolean isNotEmpty = checkingFigure.getTypeOfFigure() != "EMPTY";
-            boolean isTheSameColor = checkingFigure.isWhite() == figureIsWhite;
-
-            if(isNotEmpty && isTheSameColor){
-                it.remove();
-            }
 
 
-        }
 
-        return movementsWithAllyFigures;
-    }
-
-    private List<Point> exclusiveUnAvailablePoint(Figure figure, List<Point> pseudoMovements, List<Point> allFiguresInPseudoMovements) {
-        PointComparator pointComparator = new PointComparator();
-
-        for (Iterator<Point> it = pseudoMovements.listIterator(); it.hasNext(); ) {
-            Point p = (Point) it.next();
-            int directionFromFigureToPoint = getDirection(figure.getPosition(), p);
-
-            for (Point pointsFigures : allFiguresInPseudoMovements) {
-                int directionFromFigureToFigure = getDirection(figure.getPosition(), pointsFigures);
-
-                boolean pointsAreOnTheSameDirection = directionFromFigureToFigure == directionFromFigureToPoint;
-
-
-                if (pointsAreOnTheSameDirection) {
-
-                    boolean pointIsFromHigherHalf = directionFromFigureToPoint >= 1 && directionFromFigureToFigure <= 4;
-                    boolean pointIsFromLowerHalf = directionFromFigureToFigure >= 5 && directionFromFigureToFigure <= 8;
-
-                    boolean pointIsLowerThanFigure = pointComparator.compare(p, pointsFigures) < 0;
-                    boolean pointIsHigherThanFigure = pointComparator.compare(p, pointsFigures) > 0;
-
-                    if (pointIsFromHigherHalf && pointIsLowerThanFigure) {
-                        it.remove();
-                        break;
-                    } else if ( pointIsFromLowerHalf && pointIsHigherThanFigure) {
-                        it.remove();
-                        break;
-                    }
-
-                }
-            }
-        }
-
-        return pseudoMovements;
-    }
 
     private List<Point> getAllFiguresFromPointList(List<Point> pseudoMovements) {
         List<Point> figuresFromPseudoMovements = new LinkedList<>();
@@ -295,84 +199,7 @@ public class Board {
         return figuresFromPseudoMovements;
     }
 
-    /**
-     * Function returns int which menas direction
-     *
-     * @param from - coordition from where figures moves
-     * @param destination - cordination to where figures moves
-     * @return 1 - up left,
-     * 2 - up center
-     * 3 - up right
-     * 4 - left center
-     * 5 - right center
-     * 6 - bottom left
-     * 7 - bottom center
-     * 8 - bottom right
-     * 0 - undefinded direction
-     *
-     */
 
-    public int getDirection(Point from, Point destination){
-        int fromX = from.getPositionX();
-        int fromY = from.getPositionY();
-
-        int destinationX = destination.getPositionX();
-        int destinationY = destination.getPositionY();
-
-        //up
-        if(fromY > destinationY){
-
-            //left
-            if(fromX > destinationX){
-                return 1;
-            }
-
-            //right
-            if(fromX < destinationX){
-                return 3;
-            }
-
-            //center
-            return 2;
-        }
-
-        //center
-
-        if(fromY == destinationY){
-
-            //left
-            if(fromX > destinationX){
-                return 4;
-            }
-
-            //right
-            return 5;
-
-        }
-
-        //bottom
-        if(fromY < destinationY){
-
-            //left
-            if(fromX > destinationX){
-                return 6;
-            }
-
-            //right
-            if(fromX < destinationX){
-                return 8;
-            }
-
-            //center
-            return 7;
-
-        }
-
-
-
-
-        return 0;
-    }
 
     /*
     Displays methods
