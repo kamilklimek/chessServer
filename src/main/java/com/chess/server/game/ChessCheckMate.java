@@ -3,12 +3,16 @@ package com.chess.server.game;
 import com.chess.server.figures.Figure;
 import com.chess.server.figures.Point;
 
+import java.util.List;
+
 public class ChessCheckMate {
 
     Figure[][] boardFigures;
+    ChessAvailableMovements chessAvailableMovements;
 
     public ChessCheckMate(Figure[][] boardFigures){
         this.boardFigures=boardFigures;
+        chessAvailableMovements = new ChessAvailableMovements(this.boardFigures);
     }
 
     public boolean checkIsMate(boolean isWhite){
@@ -17,6 +21,16 @@ public class ChessCheckMate {
         for (Figure[] row:boardFigures
                 ) {
             for (Figure figure:row){
+
+                List<Point> figureMovements = chessAvailableMovements.getAvailableMovements(figure.getPosition());
+
+                for (Point position: figureMovements
+                     ) {
+                    boolean kingPositionSumFigurePosition = king.getPosition() == position;
+                    if(kingPositionSumFigurePosition){
+                        return true;
+                    }
+                }
 
             }
         }

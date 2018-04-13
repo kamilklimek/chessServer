@@ -155,6 +155,11 @@ public class Board {
         return figures;
     }
 
+
+    public List<Point> getAvailableMovements(Point point){
+        return chessAvailableMovements.getAvailableMovements(point);
+    }
+
     /*
     Displays methods
      */
