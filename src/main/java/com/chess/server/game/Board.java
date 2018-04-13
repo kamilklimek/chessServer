@@ -6,7 +6,6 @@ import com.chess.server.comparators.PointComparator;
 import com.chess.server.figures.*;
 
 import java.io.*;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 

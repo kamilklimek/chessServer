@@ -55,7 +55,7 @@ public class ChessExclusiveMovements {
     public List<Point> exclusiveAllyFigures(boolean figureIsWhite, List<Point> movementsWithAllyFigures) {
 
         for(Iterator<Point> it = movementsWithAllyFigures.iterator(); it.hasNext();){
-            Point p = (Point) it.next();
+            Point p = it.next();
 
             int pX = p.getPositionX();
             int pY = p.getPositionY();
@@ -85,7 +85,7 @@ public class ChessExclusiveMovements {
 
 
         for (Iterator<Point> it = pseudoMovements.listIterator(); it.hasNext(); ) {
-            Point p = (Point) it.next();
+            Point p = it.next();
             int directionFromFigureToPoint = getDirection(figure.getPosition(), p);
 
             for (Point pointsFigures : allFiguresInPseudoMovements) {
@@ -116,23 +116,6 @@ public class ChessExclusiveMovements {
 
         return pseudoMovements;
     }
-
-    /**
-     * Function returns int which menas direction
-     *
-     * @param from - coordition from where figures moves
-     * @param destination - cordination to where figures moves
-     * @return 1 - up left,
-     * 2 - up center
-     * 3 - up right
-     * 4 - left center
-     * 5 - right center
-     * 6 - bottom left
-     * 7 - bottom center
-     * 8 - bottom right
-     * 0 - undefinded direction
-     *
-     */
 
     private int getDirection(Point from, Point destination){
         int fromX = from.getPositionX();
