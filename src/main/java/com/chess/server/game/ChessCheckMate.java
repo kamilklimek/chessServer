@@ -15,18 +15,29 @@ public class ChessCheckMate {
         chessAvailableMovements = new ChessAvailableMovements(this.boardFigures);
     }
 
-    public boolean checkIsMate(boolean isWhite){
+    public boolean checkIsCheckMate(boolean isWhite){
+        boolean isNotCheck = checkIsMate(isWhite);
+        if(isNotCheck) return false;
 
         Figure king = findKingByColor(isWhite);
-        for (Figure[] row:boardFigures
+
+
+
+        return false;
+    }
+
+    public boolean checkIsMate(Figure[][] anotherBoard, boolean isWhite){
+
+        Figure king = findKingByColor(isWhite);
+        for (Figure[] row:anotherBoard
                 ) {
             for (Figure figure:row){
 
-                List<Point> figureMovements = chessAvailableMovements.getAvailableMovements(figure.getPosition());
+                List<Point> figureMovements = chessAvailableMovements.getAvailableMovements(anotherBoard, figure.getPosition());
 
                 for (Point position: figureMovements
-                     ) {
-                    boolean kingXSumFigurePosition = king.getPosition().getPositionX() == position.getPositionY();
+                        ) {
+                    boolean kingXSumFigurePosition = king.getPosition().getPositionX() == position.getPositionX();
                     boolean kingYSumFigurePosition = king.getPosition().getPositionY() == position.getPositionY();
 
                     if(kingXSumFigurePosition && kingYSumFigurePosition){
@@ -36,11 +47,13 @@ public class ChessCheckMate {
 
             }
         }
-
-
-
         return false;
     }
+
+    public boolean checkIsMate(boolean isWhite){
+        return checkIsMate(boardFigures, isWhite);
+    }
+
 
     private Figure findKingByColor(boolean isWhite){
 

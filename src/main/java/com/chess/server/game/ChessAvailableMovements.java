@@ -25,35 +25,40 @@ public class ChessAvailableMovements {
      * @return list of available movements
      */
 
-    public List<Point> getAvailableMovements(Point point) {
+    public List<Point> getAvailableMovements(Figure[][] anotherBoard, Point point) {
         int positionX = point.getPositionX();
         int positionY = point.getPositionY();
 
-        Figure figure = boardFields[positionY][positionX];
+        Figure figure = anotherBoard[positionY][positionX];
         boolean figureIsWhite = figure.isWhite();
 
         List<Point> pseudoMovements = figure.getAvailableMovements();
-        List<Point> allFiguresInPseudoMovements = getAllFiguresFromPointList(pseudoMovements);
+        List<Point> allFiguresInPseudoMovements = getAllFiguresFromPointList(anotherBoard, pseudoMovements);
 
         List<Point> movementsWithAllyFigures = chessExclusiveMovements.exclusiveUnAvailablePoint(figure, pseudoMovements, allFiguresInPseudoMovements);
-        List<Point> availableMovements = chessExclusiveMovements.exclusiveAllyFigures(figureIsWhite, movementsWithAllyFigures);
-        availableMovements = chessExclusiveMovements.exclusivePawnBeatenUp(figure, availableMovements);
+        List<Point> availableMovements = chessExclusiveMovements.exclusiveAllyFigures(anotherBoard, figureIsWhite, movementsWithAllyFigures);
+        availableMovements = chessExclusiveMovements.exclusivePawnBeatenUp(anotherBoard, figure, availableMovements);
+
 
         return availableMovements;
+    }
+
+    public List<Point> getAvailableMovements(Point point) {
+        return getAvailableMovements(boardFields, point);
     }
 
 
 
 
 
-    private List<Point> getAllFiguresFromPointList(List<Point> pseudoMovements) {
+    private List<Point> getAllFiguresFromPointList(Figure[][] anotherBoard, List<Point> pseudoMovements) {
         List<Point> figuresFromPseudoMovements = new LinkedList<>();
 
         for (Point p : pseudoMovements) {
             int pointX = p.getPositionX();
             int pointY = p.getPositionY();
 
-            boolean figureStandsOnPoint = boardFields[pointY][pointX].getTypeOfFigure() != "EMPTY";
+            boolean figureStandsOnPoint = anotherBoard[pointY][pointX].getTypeOfFigure() != "EMPTY";
 
             if (figureStandsOnPoint) {
                 figuresFromPseudoMovements.add(p);

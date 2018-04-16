@@ -30,7 +30,7 @@ public class Figure {
     }
 
     public void setPosition(Point position) {
-        this.position = position;
+        this.position = new Point(position.getPositionX(), position.getPositionY());
     }
 
     public String getTypeOfFigure() {
@@ -272,9 +272,15 @@ public class Figure {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(position, typeOfFigure, availableMovements);
     }
+
+
+    public Figure copy(){
+        return new Figure(new Point(position.getPositionX(), position.getPositionY()), typeOfFigure, isWhite);
+
+    }
+
 
     @Override
     public String toString(){

@@ -50,6 +50,8 @@ public class Point {
         return Objects.hash(positionX, positionY);
     }
 
+
+
     @Override
     public String toString() {
         return "Point{" +

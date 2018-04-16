@@ -17,7 +17,7 @@ public class ChessExclusiveMovements {
         this.boardFields = board;
     }
 
-    public List<Point> exclusivePawnBeatenUp(Figure figure, List<Point> availableMovements) {
+    public List<Point> exclusivePawnBeatenUp(Figure[][] anotherBoard, Figure figure, List<Point> availableMovements) {
         if(figure.getTypeOfFigure() != "PAWN")
             return availableMovements;
 
@@ -41,7 +41,7 @@ public class ChessExclusiveMovements {
             int positionY = mask.getPositionY() + figure.getPosition().getPositionY();
 
             boolean positionHigherThanZero = positionX >= 0 && positionX <= 7 && positionY >= 0 && positionY <=7;
-            boolean maskPointIsEmpty = positionHigherThanZero && boardFields[positionY][positionX].getTypeOfFigure() == "EMPTY";
+            boolean maskPointIsEmpty = positionHigherThanZero && anotherBoard[positionY][positionX].getTypeOfFigure() == "EMPTY";
             boolean listContainsPointMask = positionHigherThanZero && resultPoints.contains(new Point(positionX, positionY));
 
             if(maskPointIsEmpty && listContainsPointMask){
@@ -52,7 +52,7 @@ public class ChessExclusiveMovements {
         return resultPoints;
     }
 
-    public List<Point> exclusiveAllyFigures(boolean figureIsWhite, List<Point> movementsWithAllyFigures) {
+    public List<Point> exclusiveAllyFigures(Figure[][] anotherBoard, boolean figureIsWhite, List<Point> movementsWithAllyFigures) {
 
         for(Iterator<Point> it = movementsWithAllyFigures.iterator(); it.hasNext();){
             Point p = it.next();
@@ -60,7 +60,7 @@ public class ChessExclusiveMovements {
             int pX = p.getPositionX();
             int pY = p.getPositionY();
 
-            Figure checkingFigure = boardFields[pY][pX];
+            Figure checkingFigure = anotherBoard[pY][pX];
             boolean isNotEmpty = checkingFigure.getTypeOfFigure() != "EMPTY";
             boolean isTheSameColor = checkingFigure.isWhite() == figureIsWhite;
 
@@ -72,6 +72,14 @@ public class ChessExclusiveMovements {
         }
 
         return movementsWithAllyFigures;
+    }
+    public List<Point> exclusivePawnBeatenUp(Figure figure, List<Point> availableMovements)  {
+        return exclusivePawnBeatenUp(boardFields, figure, availableMovements);
+    }
+
+
+    public List<Point> exclusiveAllyFigures(boolean figureIsWhite, List<Point> movementsWithAllyFigures) {
+       return exclusiveAllyFigures(boardFields, figureIsWhite, movementsWithAllyFigures);
     }
 
     public List<Point> exclusiveUnAvailablePoint(Figure figure, List<Point> pseudoMovements, List<Point> allFiguresInPseudoMovements) {

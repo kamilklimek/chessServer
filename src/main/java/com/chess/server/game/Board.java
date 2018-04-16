@@ -4,8 +4,10 @@ import com.chess.server.figures.Figure;
 import com.chess.server.figures.Point;
 import com.chess.server.comparators.PointComparator;
 import com.chess.server.figures.*;
+import com.sun.deploy.util.ArrayUtil;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -109,13 +111,15 @@ public class Board {
         int toX = to.getPositionX();
         int toY = to.getPositionY();
 
-       boolean canMove = canMove(from, to);
+        boolean canMove = canMove(from, to);
 
         if(canMove){
             boolean figureIsBeatenUp = boardFields[toY][toX].getTypeOfFigure() != "EMPTY";
 
             boardFields[toY][toX] = boardFields[fromY][fromX];
+            boardFields[toY][toX].setPosition(to);
             boardFields[fromY][fromX] = new Figure(from, "EMPTY");
+
             return figureIsBeatenUp ? 1 : 0;
         }
 
@@ -124,13 +128,29 @@ public class Board {
 
     /**
      * Function calculate that figures can be moved from to another position
+     * Function checking mate before movement
      * @param from position from figures would be move
      * @param to position figure destination
      * @return true if can move
      */
 
     public boolean canMove(Point from, Point to) {
-        return chessAvailableMovements.getAvailableMovements(from).contains(to);
+        int fromX = from.getPositionX();
+        int fromY = from.getPositionY();
+        boolean isWhite = boardFields[fromY][fromX].isWhite();
+
+        int toX = to.getPositionX();
+        int toY = to.getPositionY();
+
+
+        Figure[][] newBoard = copyOriginalBoard();
+        newBoard[toY][toX] = boardFields[fromY][fromX].copy();
+        newBoard[toY][toX].setPosition(to);
+        newBoard[fromY][fromX] = new Figure(from, "EMPTY");
+
+        boolean isMate = chessCheckMate.checkIsMate(newBoard, isWhite);
+
+        return getAvailableMovements(from).contains(to) && !isMate;
     }
 
     public List<Figure> getAllWhiteFigures(){
@@ -163,6 +183,22 @@ public class Board {
 
     public boolean checkMate(boolean isWhite){
         return chessCheckMate.checkIsMate(isWhite);
+    }
+
+    public Figure[][] getBoardFields(){
+        return copyOriginalBoard();
+    }
+
+    public Figure[][] copyOriginalBoard(){
+        Figure[][] newBoard = new Figure[boardFields.length][];
+        for(int i=0;i<boardFields.length;i++){
+           newBoard[i] = Arrays.copyOf(boardFields[i], boardFields.length);
+           for(int j=0;j<boardFields[i].length;j++){
+               newBoard[i][j] = boardFields[i][j].copy();
+           }
+        }
+
+        return newBoard;
     }
 
     /*
