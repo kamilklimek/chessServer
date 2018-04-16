@@ -31,6 +31,7 @@ public class Figure {
 
     public void setPosition(Point position) {
         this.position = new Point(position.getPositionX(), position.getPositionY());
+        calculateAllAvailableMovements();
     }
 
     public String getTypeOfFigure() {

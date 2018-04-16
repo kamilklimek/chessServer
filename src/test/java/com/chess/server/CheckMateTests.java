@@ -52,5 +52,16 @@ public class CheckMateTests extends TestCase {
 
     }
 
+    @Test
+    public void TestSimpleCheckMate(){
+        Board board = new Board("boards/tests/can_move_mate.game");
+
+        assertTrue(board.checkIsCheckMate(true));
+
+
+
+
+    }
+
 }
 

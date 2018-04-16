@@ -185,6 +185,10 @@ public class Board {
         return chessCheckMate.checkIsMate(isWhite);
     }
 
+    public boolean checkIsCheckMate(boolean isWhite){
+        return chessCheckMate.checkIsCheckMate(isWhite);
+    }
+
     public Figure[][] getBoardFields(){
         return copyOriginalBoard();
     }

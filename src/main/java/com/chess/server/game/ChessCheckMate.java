@@ -16,10 +16,11 @@ public class ChessCheckMate {
     }
 
     public boolean checkIsCheckMate(boolean isWhite){
-        boolean isNotCheck = checkIsMate(isWhite);
+        boolean isNotCheck = !checkIsMate(isWhite);
         if(isNotCheck) return false;
 
         Figure king = findKingByColor(isWhite);
+        List<Point> kingsMovements = chessAvailableMovements.getAvailableMovements(boardFigures, king.getPosition());
 
 
 
@@ -66,7 +67,7 @@ public class ChessCheckMate {
                 boolean isKing = figure.getTypeOfFigure() == "KING";
 
                 if(isKing && isWhite){
-                    return figure;
+                    return figure.copy();
                 }
 
             }
