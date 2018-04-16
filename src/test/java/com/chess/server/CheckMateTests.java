@@ -53,15 +53,26 @@ public class CheckMateTests extends TestCase {
     }
 
     @Test
-    public void TestSimpleCheckMate(){
+    public void testSimpleCheckMate(){
         Board board = new Board("boards/tests/can_move_mate.game");
 
         assertTrue(board.checkIsCheckMate(true));
 
+    }
 
 
+    @Test
+    public void testCheckMateWithBishop(){
+        Board board = new Board("boards/tests/can_move_mate_bishop.game");
+        assertFalse(board.checkIsCheckMate(true));
 
     }
 
+    @Test
+    public void testCheckMateWithBishopAndDefender(){
+        Board board = new Board("boards/tests/check_defense_bishop.game");
+
+        assertFalse(board.checkIsCheckMate(true));
+    }
 }
 

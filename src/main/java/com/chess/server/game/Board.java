@@ -162,14 +162,18 @@ public class Board {
     }
 
     private List<Figure> getAllFiguresByColor(boolean isWhite){
+        return Board.getAllFiguresByColor(boardFields, isWhite);
+    }
+
+    public static List<Figure> getAllFiguresByColor(Figure[][] board, boolean isWhite){
         List<Figure> figures = new LinkedList<>();
 
         for(int i=0;i<8;i++){
             for(int j=0;j<8;j++){
-                boolean isTheSameColor = boardFields[j][i].isWhite() == isWhite;
-                boolean notEmpty = boardFields[j][i].getTypeOfFigure() != "EMPTY";
+                boolean isTheSameColor = board[j][i].isWhite() == isWhite;
+                boolean notEmpty = board[j][i].getTypeOfFigure() != "EMPTY";
                 if(isTheSameColor && notEmpty)
-                    figures.add(boardFields[j][i]);
+                    figures.add(board[j][i]);
             }
         }
 
