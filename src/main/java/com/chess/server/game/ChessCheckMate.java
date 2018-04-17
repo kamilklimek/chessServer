@@ -25,9 +25,9 @@ public class ChessCheckMate {
 
         Figure king = findKingByColor(isWhite);
         List<Point> kingsMovements = chessAvailableMovements.getAvailableMovements(boardFigures, king.getPosition());
-        List<Point> kingsMovementsExcluded = excludeSharedMovements(kingsMovements, king.isWhite());
-
+        List<Point> kingsMovementsExcluded = excludeSharedMovements(kingsMovements, king);
         //possible movements
+        System.out.println(kingsMovementsExcluded);
         boolean hasPossibleMovements = kingsMovementsExcluded.size() > 0;
         if(hasPossibleMovements) return false;
 
@@ -35,58 +35,82 @@ public class ChessCheckMate {
         // ???
 
         //shield by ally figures
-
-
-        Point pointToProtect = getSubstractionTwoList(kingsMovements, kingsMovementsExcluded);
-        boolean kingCanBeProtected = canProtectKing(king, pointToProtect);
-
+        Figure attacker = getKingsAttacker(kingsMovements, king);
+        boolean kingCanBeProtected = canProtectKing(king, attacker);
         if(kingCanBeProtected) return false;
-
-
 
 
         return true;
     }
 
-    private boolean canProtectKing(Figure king, Point pointToProtect) {
-        boolean kingsAlly = king.isWhite();
-        List<Figure> kingsAllies = Board.getAllFiguresByColor(boardFigures, kingsAlly);
+    private Figure getKingsAttacker(List<Point> kingsMovements, Figure king) {
+        Figure attacker = new Figure(new Point(0,0), "EMPTY");
+        List<Figure> enemies = Board.getAllFiguresByColor(boardFigures, !king.isWhite());
 
-        for (Figure ally : kingsAllies
+        for (Figure enemy:enemies
              ) {
-            List<Point> availableMovements = chessAvailableMovements.getAvailableMovements(boardFigures, ally.getPosition());
 
-            for (Point p:availableMovements
+            List<Point> enemysMovements = chessAvailableMovements.getAvailableMovements(boardFigures, enemy.getPosition());
+
+            for (Point enemysPoint:enemysMovements
                  ) {
-                boolean canProtectKing = Objects.equals(p, pointToProtect);
-                if(canProtectKing) return true;
-            }
+                boolean attackKing = Objects.equals(king.getPosition(), enemysPoint);
+                if(attackKing){
+                    return enemy.copy();
+                }
 
+            }
 
         }
 
+        return attacker;
+    }
+
+    private boolean canProtectKing(Figure king, Figure attacker) {
+        boolean kingsAlly = king.isWhite();
+        List<Figure> kingsAllies = Board.getAllFiguresByColor(boardFigures, kingsAlly);
+        List<Figure> kingsAlliesWithoutKing = excludeKing(king, kingsAllies);
+
+        for (Figure ally : kingsAlliesWithoutKing
+             ) {
+            List<Point> availableMovements = chessAvailableMovements.getAvailableMovements(boardFigures, ally.getPosition());
+            for (Point p:availableMovements
+                 ) {
+
+                for (Point attackerPoint: chessAvailableMovements.getAvailableMovements(boardFigures, attacker.getPosition())
+                     ) {
+
+                    boolean canShieldOrBeatenUp = Objects.equals(attackerPoint, p);
+                    if(canShieldOrBeatenUp)
+                        return true;
+                }
+            }
+
+        }
 
         return false;
     }
 
-    private Point getSubstractionTwoList(List<Point> kingsMovements, List<Point> kingsMovementsExcluded) {
+    private List<Figure> excludeKing(Figure king, List<Figure> kingsAllies) {
+        List<Figure> kingsAlliesWithoutKing = new LinkedList<>(kingsAllies);
+        for(Iterator<Figure> it = kingsAlliesWithoutKing.iterator(); it.hasNext(); ){
+            Figure figure = it.next();
+            boolean isWhite = figure.isWhite() == king.isWhite();
+            boolean isKing = figure.getTypeOfFigure() == "KING";
 
-        for (Point kingMovement:kingsMovements
-             ) {
-            for (Point excludedKingMovement:kingsMovementsExcluded
-                 ) {
-                boolean pointsEqual = Objects.equals(kingMovement, excludedKingMovement);
-                if(pointsEqual)
-                    return kingMovement;
+            if(isKing && isWhite){
+                it.remove();
+                return kingsAlliesWithoutKing;
             }
         }
 
-        return new Point(0, 0);
+        return kingsAlliesWithoutKing;
     }
 
-    private List<Point> excludeSharedMovements(List<Point> king, boolean kingsColor) {
-        List<Figure> kingsEnemies = Board.getAllFiguresByColor(boardFigures, !kingsColor);
-        List<Point> kingsMovements = new LinkedList<>(king);
+    private List<Point> excludeSharedMovements(List<Point> kingsMov, Figure king) {
+        List<Figure> kingsEnemies = Board.getAllFiguresByColor(boardFigures, !king.isWhite());
+        List<Point> kingsMovements = new LinkedList<>(kingsMov);
+
 
         boolean goToBreak = false;
         for(Iterator<Point> it = kingsMovements.iterator(); it.hasNext();){
@@ -98,9 +122,12 @@ public class ChessCheckMate {
                     ) {
 
                 if(goToBreak){
-                goToBreak = false;
-                break;
-            }
+                    goToBreak = false;
+                    break;
+                }
+
+                //can beat up and move by king?
+
                 for(Point p : chessAvailableMovements.getAvailableMovements(boardFigures, figure.getPosition())){
 
 
@@ -108,11 +135,9 @@ public class ChessCheckMate {
                     if(pointsEquals){
                         it.remove();
                         boolean hasNext = it.hasNext();
-
                         if(hasNext)
                             point = it.next();
                         else{
-
                             goToBreak=true;
                             break;
                         }

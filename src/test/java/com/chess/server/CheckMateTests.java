@@ -3,6 +3,7 @@ package com.chess.server;
 import com.chess.server.figures.Point;
 import com.chess.server.game.Board;
 import com.chess.server.game.ChessCheckMate;
+import junit.framework.Assert;
 import junit.framework.TestCase;
 import org.junit.jupiter.api.Test;
 
@@ -73,6 +74,24 @@ public class CheckMateTests extends TestCase {
         Board board = new Board("boards/tests/check_defense_bishop.game");
 
         assertFalse(board.checkIsCheckMate(true));
+    }
+
+    @Test
+    public void testCheckMateSoloKing(){
+        Board board = new Board("boards/tests/check_solo_king.game");
+        assertTrue(board.checkIsCheckMate(true));
+    }
+
+    @Test
+    public void testCheckMateWithBeatenUpAttacker(){
+        Board board = new Board("boards/tests/check_beaten_up_attacker.game");
+        assertFalse(board.checkIsCheckMate(true));
+    }
+
+    @Test
+    public void testCheckMateWithBeateUpAttackerByKing(){
+        Board board = new Board("boards/tests/check_king_beaten_up_attacker.game");
+        assertTrue(board.checkIsCheckMate(true));
     }
 }
 

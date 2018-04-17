@@ -19,6 +19,7 @@ public class Board {
     private ChessCheckMate chessCheckMate;
 
 
+
     public Board() {
         nameFile = "boards/standard.game";
         init();
@@ -153,6 +154,8 @@ public class Board {
         return getAvailableMovements(from).contains(to) && !isMate;
     }
 
+
+
     public List<Figure> getAllWhiteFigures(){
         return getAllFiguresByColor(true);
     }
@@ -198,12 +201,16 @@ public class Board {
     }
 
     public Figure[][] copyOriginalBoard(){
-        Figure[][] newBoard = new Figure[boardFields.length][];
-        for(int i=0;i<boardFields.length;i++){
-           newBoard[i] = Arrays.copyOf(boardFields[i], boardFields.length);
-           for(int j=0;j<boardFields[i].length;j++){
-               newBoard[i][j] = boardFields[i][j].copy();
-           }
+        return Board.copyOriginalBoard(boardFields);
+    }
+
+    public static Figure[][] copyOriginalBoard(Figure[][] board){
+        Figure[][] newBoard = new Figure[board.length][];
+        for(int i=0;i<board.length;i++){
+            newBoard[i] = Arrays.copyOf(board[i], board.length);
+            for(int j=0;j<board[i].length;j++){
+                newBoard[i][j] = board[i][j].copy();
+            }
         }
 
         return newBoard;
@@ -213,16 +220,16 @@ public class Board {
     Displays methods
      */
 
-    public void display(){
+    public static void display(Figure[][] board){
         for(int i=0;i<8;i++){
             for(int j=0;j<8;j++){
-                boolean isRook = boardFields[i][j].getTypeOfFigure() == "ROOK";
-                boolean isKnight = boardFields[i][j].getTypeOfFigure() == "KNIGHT";
-                boolean isQueen = boardFields[i][j].getTypeOfFigure() == "QUEEN";
-                boolean isKing = boardFields[i][j].getTypeOfFigure() == "KING";
-                boolean isPawn = boardFields[i][j].getTypeOfFigure() == "PAWN";
-                boolean isEmpty = boardFields[i][j].getTypeOfFigure() == "EMPTY";
-                boolean isBishop = boardFields[i][j].getTypeOfFigure() == "BISHOP";
+                boolean isRook = board[i][j].getTypeOfFigure() == "ROOK";
+                boolean isKnight = board[i][j].getTypeOfFigure() == "KNIGHT";
+                boolean isQueen = board[i][j].getTypeOfFigure() == "QUEEN";
+                boolean isKing = board[i][j].getTypeOfFigure() == "KING";
+                boolean isPawn = board[i][j].getTypeOfFigure() == "PAWN";
+                boolean isEmpty = board[i][j].getTypeOfFigure() == "EMPTY";
+                boolean isBishop = board[i][j].getTypeOfFigure() == "BISHOP";
 
                 if(isRook){
                     System.out.print("R");
@@ -243,6 +250,10 @@ public class Board {
             System.out.println();
         }
 
+    }
+
+    public void display(){
+        Board.display(boardFields);
     }
 
 
