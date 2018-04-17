@@ -97,25 +97,25 @@ public class CheckMateTests extends TestCase {
     @Test
     public void testCheckMateAnotherOne(){
         Board board = new Board("boards/tests/check_mate_one.game");
-
+        assertFalse(board.checkIsCheckMate(true));
     }
 
     @Test
     public void testCheckMateAnotherTwo(){
         Board board = new Board("boards/tests/check_mate_two.game");
-
+        assertFalse(board.checkIsCheckMate(true));
     }
 
     @Test
     public void testCheckMateAnotherThree(){
         Board board = new Board("boards/tests/check_mate_three.game");
-
+        assertFalse(board.checkIsCheckMate(true));
     }
 
     @Test
     public void testCheckMateAnotherFour(){
         Board board = new Board("boards/tests/check_mate_four.game");
-
+        assertFalse(board.checkIsCheckMate(true));
 
     }
 
@@ -123,8 +123,59 @@ public class CheckMateTests extends TestCase {
     public void testCheckMateAnotherFive(){
         Board board = new Board("boards/tests/check_mate_five.game");
 
-
+        assertTrue(board.checkIsCheckMate(true));
 
     }
+    @Test
+    public void testCheckMateAnotherSix(){
+        Board board = new Board("boards/tests/check_mate_six.game");
+
+        assertFalse(board.checkIsCheckMate(true));
+
+    }
+    @Test
+    public void testCheckMateAnotherSeven(){
+        Board board = new Board("boards/tests/check_mate_seven.game");
+
+        assertTrue(board.checkIsCheckMate(true));
+
+    }
+    @Test
+    public void testCheckMateAnotherEight(){
+        Board board = new Board("boards/tests/check_mate_eight.game");
+
+        assertTrue(board.checkIsCheckMate(true));
+
+    }
+    @Test
+    public void testCheckMateAnotherNine(){
+        Board board = new Board("boards/tests/check_mate_nine.game");
+
+        assertTrue(board.checkIsCheckMate(true));
+
+    }
+    @Test
+    public void testCheckMateAnotherTen(){
+        Board board = new Board("boards/tests/check_mate_ten.game");
+
+        assertFalse(board.checkIsCheckMate(true));
+
+    }
+    @Test
+    public void testCheckMateAnotherEleven(){
+        Board board = new Board("boards/tests/check_mate_eleven.game");
+
+        assertTrue(board.checkIsCheckMate(true));
+
+    }
+    @Test
+    public void testCheckMateAnotherTwelve(){
+        Board board = new Board("boards/tests/check_mate_twelve.game");
+
+        assertTrue(board.checkIsCheckMate(true));
+
+    }
+
+
 }
 
