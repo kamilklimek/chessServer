@@ -23,6 +23,8 @@ public class ChessCheckMate {
         boolean isNotCheck = !checkIsMate(isWhite);
         if(isNotCheck) return false;
 
+        //boardFigures[7]
+
         Figure king = findKingByColor(isWhite);
         List<Point> kingsMovements = chessAvailableMovements.getAvailableMovements(boardFigures, king.getPosition());
         List<Point> kingsMovementsExcluded = excludeSharedMovements(kingsMovements, king);

@@ -91,7 +91,40 @@ public class CheckMateTests extends TestCase {
     @Test
     public void testCheckMateWithBeateUpAttackerByKing(){
         Board board = new Board("boards/tests/check_king_beaten_up_attacker.game");
-        assertTrue(board.checkIsCheckMate(true));
+        assertFalse(board.checkIsCheckMate(true));
+    }
+
+    @Test
+    public void testCheckMateAnotherOne(){
+        Board board = new Board("boards/tests/check_mate_one.game");
+
+    }
+
+    @Test
+    public void testCheckMateAnotherTwo(){
+        Board board = new Board("boards/tests/check_mate_two.game");
+
+    }
+
+    @Test
+    public void testCheckMateAnotherThree(){
+        Board board = new Board("boards/tests/check_mate_three.game");
+
+    }
+
+    @Test
+    public void testCheckMateAnotherFour(){
+        Board board = new Board("boards/tests/check_mate_four.game");
+
+
+    }
+
+    @Test
+    public void testCheckMateAnotherFive(){
+        Board board = new Board("boards/tests/check_mate_five.game");
+
+
+
     }
 }
 

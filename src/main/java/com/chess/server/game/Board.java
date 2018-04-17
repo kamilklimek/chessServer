@@ -4,7 +4,6 @@ import com.chess.server.figures.Figure;
 import com.chess.server.figures.Point;
 import com.chess.server.comparators.PointComparator;
 import com.chess.server.figures.*;
-import com.sun.deploy.util.ArrayUtil;
 
 import java.io.*;
 import java.util.Arrays;
