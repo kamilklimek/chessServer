@@ -255,17 +255,21 @@ public class Board {
         Board.display(boardFields);
     }
 
-
-    public void displayAllFigures(){
-
+    public static void displayAllFigures(Figure[][] boardFields){
         System.out.println("All figures: ");
         for(Figure[] figures : boardFields){
             for(Figure figure : figures){
                 System.out.println(figure.toString());
             }
         }
-
-
     }
+
+    public void displayAllFigures() {
+        Board.displayAllFigures(this.boardFields);
+    }
+
+
+
+
 
 }
