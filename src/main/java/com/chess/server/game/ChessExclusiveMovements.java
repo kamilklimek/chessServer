@@ -94,10 +94,10 @@ public class ChessExclusiveMovements {
 
         for (Iterator<Point> it = pseudoMovements.listIterator(); it.hasNext(); ) {
             Point p = it.next();
-            int directionFromFigureToPoint = getDirection(figure.getPosition(), p);
+            int directionFromFigureToPoint = ChessExclusiveMovements.getDirection(figure.getPosition(), p);
 
             for (Point pointsFigures : allFiguresInPseudoMovements) {
-                int directionFromFigureToFigure = getDirection(figure.getPosition(), pointsFigures);
+                int directionFromFigureToFigure = ChessExclusiveMovements.getDirection(figure.getPosition(), pointsFigures);
 
                 boolean pointsAreOnTheSameDirection = directionFromFigureToFigure == directionFromFigureToPoint;
 
@@ -125,7 +125,7 @@ public class ChessExclusiveMovements {
         return pseudoMovements;
     }
 
-    private int getDirection(Point from, Point destination){
+    public static int getDirection(Point from, Point destination){
         int fromX = from.getPositionX();
         int fromY = from.getPositionY();
 
