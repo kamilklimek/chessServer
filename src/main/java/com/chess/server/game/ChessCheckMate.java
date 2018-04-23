@@ -16,6 +16,21 @@ public class ChessCheckMate {
         chessAvailableMovements = new ChessAvailableMovements(this.boardFigures);
     }
 
+    public boolean checkIsPat(boolean isWhite){
+        boolean isNotCheckMate = checkIsCheckMate(isWhite);
+
+        Figure king = findKingByColor(isWhite);
+        List<Point> kingsMovements = chessAvailableMovements.getAvailableMovements(boardFigures, king);
+
+        boolean kingCantMove = kingsMovements.size() == 0;
+
+        if(isNotCheckMate && kingCantMove){
+            return true;
+        }
+
+        return false;
+    }
+
     public boolean checkIsCheckMate(boolean isWhite){
         //if not check -> cannot be check mate
         boolean isNotCheck = !checkIsMate(isWhite);
