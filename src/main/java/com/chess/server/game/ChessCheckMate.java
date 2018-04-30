@@ -20,7 +20,7 @@ public class ChessCheckMate {
         boolean isNotCheckMate = checkIsCheckMate(isWhite);
 
         Figure king = findKingByColor(isWhite);
-        List<Point> kingsMovements = chessAvailableMovements.getAvailableMovements(boardFigures, king);
+        List<Point> kingsMovements = chessAvailableMovements.getAvailableMovements(boardFigures, king.getPosition());
 
         boolean kingCantMove = kingsMovements.size() == 0;
 
