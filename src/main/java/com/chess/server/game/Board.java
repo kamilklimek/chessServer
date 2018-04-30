@@ -81,15 +81,6 @@ public class Board {
                     }
 
 
-                    if(isKing || isRook){
-                        boolean isOnAnotherPlaceY = j != 4 || j != 3;
-                        boolean isOnAnotherPlaceX = i != 0 || i != 7;
-
-                        if(isOnAnotherPlaceX || isOnAnotherPlaceY){
-                            ((Castle) boardFields[i][j]).setFigureMoved();
-                        }
-                    }
-
                 }
 
             }

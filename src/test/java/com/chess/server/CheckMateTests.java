@@ -1,5 +1,6 @@
 package com.chess.server;
 
+import com.chess.server.figures.King;
 import com.chess.server.figures.Point;
 import com.chess.server.game.Board;
 import com.chess.server.game.ChessCheckMate;
@@ -143,7 +144,6 @@ public class CheckMateTests extends TestCase {
     @Test
     public void testCheckMateAnotherEight(){
         Board board = new Board("boards/tests/check_mate_eight.game");
-
         assertTrue(board.checkIsCheckMate(true));
 
     }

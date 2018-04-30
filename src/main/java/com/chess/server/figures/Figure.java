@@ -229,9 +229,15 @@ public class Figure {
         }
 
         //ad castle mask
-        if(this instanceof King && !((King) this).isMoved()){
+
+        boolean isWhitePosition = kingPositionX == 3 && kingPositionY == 0;
+        boolean isBlackPosition = kingPositionX == 4 && kingPositionY == 7;
+        if(this instanceof King && !((King) this).isMoved() && (isBlackPosition || isWhitePosition)){
             for(Point castle : castleMask){
-                movements.add(new Point(castle.getPositionX() + kingPositionX, castle.getPositionY()+kingPositionY));
+                int newX = castle.getPositionX() + kingPositionX;
+                int newY = castle.getPositionY() + kingPositionY;
+
+                movements.add(new Point(newX, newY));
             }
         }
 

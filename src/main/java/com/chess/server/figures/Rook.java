@@ -3,7 +3,7 @@ package com.chess.server.figures;
 
 import com.chess.server.api.Castle;
 
-;
+;import java.util.Objects;
 
 
 public class Rook extends Figure implements Castle {
@@ -12,7 +12,14 @@ public class Rook extends Figure implements Castle {
 
     public Rook(Point point, boolean isWhite){
         super(point, "ROOK", isWhite);
-        moved = false;
+        moved = true;
+
+        boolean isOnWhite = Objects.equals(point, new Point(3, 0));
+        boolean isOnBlack = Objects.equals(point, new Point(4, 7));
+
+        if(isOnWhite || isOnBlack){
+            moved = false;
+        }
     }
 
     @Override

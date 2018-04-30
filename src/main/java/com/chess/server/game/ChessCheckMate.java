@@ -42,10 +42,8 @@ public class ChessCheckMate {
         List<Point> kingMovements = chessAvailableMovements.getAvailableMovements(kingsPosition);
         List<Point> kingsMovementsExcludedProtectedEnemyFigures = excludeProtectedEnemyFigures(kingMovements, king);
 
-
         boolean kingsHasPossibleMovements = kingsMovementsExcludedProtectedEnemyFigures.size() > 0;
-        System.out.println("Possibly movements: "+kingsMovementsExcludedProtectedEnemyFigures);
-        if(kingsHasPossibleMovements) return false;
+       if(kingsHasPossibleMovements) return false;
 
         boolean kingCanBeProtected = canProtectKing(king);
         if(kingCanBeProtected) return false;
