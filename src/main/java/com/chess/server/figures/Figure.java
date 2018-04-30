@@ -31,6 +31,15 @@ public class Figure {
 
     public void setPosition(Point position) {
         this.position = new Point(position.getPositionX(), position.getPositionY());
+
+        boolean kingMoved = this instanceof King && ((King) this).position != position;
+        boolean rookMoved = this instanceof Rook && ((Rook) this).position != position;
+        if(kingMoved){
+            ((King) this).setFigureMoved();
+        }else if(rookMoved){
+            ((Rook) this).setFigureMoved();
+        }
+
         calculateAllAvailableMovements();
     }
 
@@ -204,6 +213,11 @@ public class Figure {
         int kingPositionX = position.getPositionX();
         int kingPositionY = position.getPositionY();
 
+        List<Point> castleMask = new ArrayList<>(Arrays.asList(
+                new Point(2, 0),
+                new Point(-2, 0)
+        ));
+
         for(int i=kingPositionX-1;i<=kingPositionX+1;i++){
             for(int j=kingPositionY-1;j<=kingPositionY+1;j++){
                 if(i < 0 || j < 0 || j >= 8 || i >= 8 || ( i == kingPositionX && j == kingPositionY)){
@@ -211,6 +225,13 @@ public class Figure {
                 }
                 Point point = new Point(i, j);
                 movements.add(point);
+            }
+        }
+
+        //ad castle mask
+        if(this instanceof King && !((King) this).isMoved()){
+            for(Point castle : castleMask){
+                movements.add(new Point(castle.getPositionX() + kingPositionX, castle.getPositionY()+kingPositionY));
             }
         }
 

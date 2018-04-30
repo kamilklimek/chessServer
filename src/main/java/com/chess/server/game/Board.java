@@ -1,5 +1,6 @@
 package com.chess.server.game;
 
+import com.chess.server.api.Castle;
 import com.chess.server.figures.Figure;
 import com.chess.server.figures.Point;
 import com.chess.server.comparators.PointComparator;
@@ -67,6 +68,7 @@ public class Board {
                         boardFields[i][j] = new Rook(new Point(j, i), isWhite);
                     }else if(isKing){
                         boardFields[i][j] = new King(new Point(j, i), isWhite);
+
                     }else if(isPawn){
 
                         boardFields[i][j] = new Pawn(new Point(j, i), isWhite);
@@ -78,6 +80,15 @@ public class Board {
                         boardFields[i][j] = new Figure(new Point(j, i), "EMPTY");
                     }
 
+
+                    if(isKing || isRook){
+                        boolean isOnAnotherPlaceY = j != 4 || j != 3;
+                        boolean isOnAnotherPlaceX = i != 0 || i != 7;
+
+                        if(isOnAnotherPlaceX || isOnAnotherPlaceY){
+                            ((Castle) boardFields[i][j]).setFigureMoved();
+                        }
+                    }
 
                 }
 
