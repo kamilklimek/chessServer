@@ -5,7 +5,7 @@ import com.chess.server.api.Castle;
 
 public class King extends Figure implements Castle {
 
-    boolean moved;
+    private boolean moved;
 
     public King(Point point, boolean isWhite){
         super(point, "KING", isWhite);
