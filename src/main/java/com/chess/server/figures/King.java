@@ -5,17 +5,20 @@ import com.chess.server.api.Castle;
 
 public class King extends Figure implements Castle {
 
+    boolean moved;
+
     public King(Point point, boolean isWhite){
         super(point, "KING", isWhite);
+        moved = false;
     }
 
     @Override
     public boolean isMoved() {
-        return false;
+        return moved;
     }
 
     @Override
     public void setFigureMoved() {
-
+        moved=true;
     }
 }
