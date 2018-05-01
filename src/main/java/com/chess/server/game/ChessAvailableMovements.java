@@ -39,7 +39,7 @@ public class ChessAvailableMovements {
         List<Point> availableMovements = chessExclusiveMovements.exclusiveAllyFigures(anotherBoard, figureIsWhite, movementsWithAllyFigures);
         availableMovements = chessExclusiveMovements.exclusivePawnBeatenUp(anotherBoard, figure, availableMovements);
 
-
+        System.out.println("Figura: "+figure+" jej ruchy: "+availableMovements);
         return availableMovements;
     }
 
