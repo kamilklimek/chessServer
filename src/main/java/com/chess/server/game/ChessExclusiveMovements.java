@@ -2,12 +2,11 @@ package com.chess.server.game;
 
 import com.chess.server.comparators.PointComparator;
 import com.chess.server.figures.Figure;
+import com.chess.server.figures.King;
 import com.chess.server.figures.Point;
+import com.chess.server.figures.Rook;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class ChessExclusiveMovements {
 
@@ -51,6 +50,7 @@ public class ChessExclusiveMovements {
         }
         return resultPoints;
     }
+
 
     public List<Point> exclusiveAllyFigures(Figure[][] anotherBoard, boolean figureIsWhite, List<Point> movementsWithAllyFigures) {
 

@@ -7,9 +7,7 @@ import com.chess.server.comparators.PointComparator;
 import com.chess.server.figures.*;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class Board {
 
@@ -32,9 +30,10 @@ public class Board {
 
     private void init(){
         boardFields = new Figure[8][8];
-        chessAvailableMovements = new ChessAvailableMovements(boardFields);
         chessCheckMate = new ChessCheckMate(boardFields);
+        chessAvailableMovements = new ChessAvailableMovements(boardFields);
         initGameFromFile(nameFile);
+
     }
 
     private void initGameFromFile(String fileName){
@@ -104,9 +103,14 @@ public class Board {
      * @return 1 - figure is beaten up,
      *         0 - moved without beaten up
      *         -1 - can't move to destination point
+     *         2 - castling
+     *         3 - pawn arrive end of board
      */
 
+
     public int moveFigure(Point from, Point to){
+
+        System.out.println("Wejscie numer jeden dla: "+from+", do"+to);
         int fromX = from.getPositionX();
         int fromY = from.getPositionY();
 
@@ -116,17 +120,158 @@ public class Board {
         boolean canMove = canMove(from, to);
 
         if(canMove){
+            Figure figureToMove = boardFields[fromY][fromX];
             boolean figureIsBeatenUp = boardFields[toY][toX].getTypeOfFigure() != "EMPTY";
+
+            boolean isCastling = figureToMove.getTypeOfFigure() == "KING";
+
+            if(isCastling){
+                int substract = from.getPositionX() - to.getPositionX();
+
+                if(substract > 0 ){
+                    move(new Point(0, from.getPositionY()), new Point(3, from.getPositionY()));
+                }else{
+                    move(new Point(7, from.getPositionY()), new Point(5, from.getPositionY()));
+                }
+
+                boardFields[toY][toX] = boardFields[fromY][fromX];
+                boardFields[toY][toX].setPosition(to);
+                boardFields[fromY][fromX] = new Figure(from, "EMPTY");
+
+                System.out.println("NO I KONIEC MOVE FIGURE, CASTLE ROBIE");
+                return 2;
+
+            }
+
+            boolean isPawn = figureToMove.getTypeOfFigure() == "PAWN";
+            boolean pawnArrived = false;
+            if(isPawn){
+                boolean whitePawnArrived = figureToMove.isWhite() && figureToMove.getPosition().getPositionY() == 7;
+                boolean whiteBlackArrived = figureToMove.isWhite() && figureToMove.getPosition().getPositionY() == 0;
+
+                if(whiteBlackArrived || whitePawnArrived){
+                    pawnArrived = true;
+                }
+
+
+            }
+
 
             boardFields[toY][toX] = boardFields[fromY][fromX];
             boardFields[toY][toX].setPosition(to);
             boardFields[fromY][fromX] = new Figure(from, "EMPTY");
 
-            return figureIsBeatenUp ? 1 : 0;
+
+
+            return figureIsBeatenUp ? 1 : isCastling ? 2 : pawnArrived ? 3 : 0;
         }
 
         return -1;
     }
+
+    private void move(Point from, Point to) {
+        int toX = to.getPositionX();
+        int toY = to.getPositionY();
+
+        int fromY = from.getPositionY();
+        int fromX = from.getPositionX();
+
+        boardFields[toY][toX] = boardFields[fromY][fromX];
+        boardFields[toY][toX].setPosition(to);
+        boardFields[fromY][fromX] = new Figure(from, "EMPTY");
+
+    }
+
+    public List<Point> addCastling(Figure[][] anotherBoard, Figure king){
+        System.out.println("Generuje castling");
+        //Lista na ruchy krola
+        List<Point> availableMovements = new LinkedList<>();
+
+        //jezeli krol jest szachowany nie mozna wykonac roszady
+        if(chessCheckMate.checkIsMate(anotherBoard, king.isWhite())) return availableMovements;
+
+
+        //figura nie jest krolem
+        if(king.getTypeOfFigure() != "KING") return availableMovements;
+
+        //krol sie ruszyl
+        if(king instanceof King){
+            boolean moved = ((King) king).isMoved();
+            if(moved) return availableMovements;
+        }
+
+        //wieza sie ruszyla
+        boolean kingIsWhite = king.isWhite();
+
+        //znajdz wieze tego samego koloru
+        List<Figure> allyFigures = Board.getAllFiguresByColor(anotherBoard, kingIsWhite);
+        List<Figure> allyRooks = new LinkedList<>();
+
+        for (Figure figure:allyFigures
+                ) {
+            boolean isRook = figure.getTypeOfFigure() == "ROOK";
+            boolean isNotMoved = figure.isMoved();
+            if(isRook && isNotMoved)
+                allyRooks.add(figure.copy());
+        }
+
+
+        //jezeli wieze sie ruszyly to nie mozna wykonac roszady
+        if(allyRooks.size()==0) return availableMovements;
+
+        //czy sa puste pola miedzy wiezami i nie sa szachowane
+
+        boolean shortCastling, longCastling, notCheck = false;
+        if (kingIsWhite) {
+
+            Point kingPosition = new Point(3, 0);
+            shortCastling = anotherBoard[0][0].getTypeOfFigure()=="ROOK" && anotherBoard[0][1].getTypeOfFigure() == "EMPTY" && anotherBoard[0][2].getTypeOfFigure() == "EMPTY";
+            longCastling = anotherBoard[0][7].getTypeOfFigure()=="ROOK" && anotherBoard[0][4].getTypeOfFigure() == "EMPTY" && anotherBoard[0][5].getTypeOfFigure() == "EMPTY" && anotherBoard[0][6].getTypeOfFigure() == "EMPTY";
+
+            if (shortCastling) {
+
+                notCheck =canMove(kingPosition, new Point(1, 0)) && canMove(kingPosition, new Point(2, 0));
+
+                if (notCheck)
+                    availableMovements.add(new Point(1, 0));
+
+            }
+
+            if (longCastling) {
+
+                notCheck = canMove(kingPosition, new Point(4, 0)) && canMove(kingPosition, new Point(5, 0)) && canMove( kingPosition, new Point(6, 0));
+
+                if (notCheck)
+                    availableMovements.add(new Point(6, 0));
+            }
+
+
+        } else {
+
+            Point kingPosition = new Point(4, 7);
+            shortCastling = anotherBoard[7][7].getTypeOfFigure()=="ROOK" && anotherBoard[7][5].getTypeOfFigure() == "EMPTY" && anotherBoard[7][6].getTypeOfFigure() == "EMPTY";
+            longCastling =anotherBoard[7][0].getTypeOfFigure()=="ROOK" &&  anotherBoard[7][1].getTypeOfFigure() == "EMPTY" && anotherBoard[7][2].getTypeOfFigure() == "EMPTY" && anotherBoard[7][3].getTypeOfFigure() == "EMPTY";
+
+            if (shortCastling) {
+
+                notCheck = wontBeCheck(kingPosition, new Point(5, 7)) && wontBeCheck(kingPosition, new Point(6, 7));
+
+                if (notCheck)
+                    availableMovements.add(new Point(6, 7));
+
+            }
+
+            if (longCastling) {
+                notCheck = wontBeCheck(kingPosition, new Point(1, 7)) && wontBeCheck(kingPosition, new Point(2, 7)) && wontBeCheck(kingPosition, new Point(3, 7));
+                if (notCheck)
+                    availableMovements.add(new Point(2, 7));
+            }
+
+        }
+        return  availableMovements;
+
+    }
+
 
     /**
      * Function calculate that figures can be moved from to another position
@@ -137,6 +282,10 @@ public class Board {
      */
 
     public boolean canMove(Point from, Point to) {
+        return getAvailableMovements(from).contains(to) && wontBeCheck(from, to);
+    }
+
+    public boolean wontBeCheck(Point from, Point to) {
         int fromX = from.getPositionX();
         int fromY = from.getPositionY();
         boolean isWhite = boardFields[fromY][fromX].isWhite();
@@ -152,7 +301,7 @@ public class Board {
 
         boolean isMate = chessCheckMate.checkIsMate(newBoard, isWhite);
 
-        return getAvailableMovements(from).contains(to) && !isMate;
+        return !isMate;
     }
 
 
@@ -165,7 +314,7 @@ public class Board {
         return getAllFiguresByColor(false);
     }
 
-    private List<Figure> getAllFiguresByColor(boolean isWhite){
+    public List<Figure> getAllFiguresByColor(boolean isWhite){
         return Board.getAllFiguresByColor(boardFields, isWhite);
     }
 
@@ -186,7 +335,23 @@ public class Board {
 
 
     public List<Point> getAvailableMovements(Point point){
-        return chessAvailableMovements.getAvailableMovements(point);
+        List<Point> availableMovements = chessAvailableMovements.getAvailableMovements(point);
+
+        Figure figure = boardFields[point.getPositionY()][point.getPositionX()];
+        if(figure.getTypeOfFigure()=="KING"){
+            List<Point> castling = addCastling(boardFields, figure);
+
+            for (Point p:castling
+                 ) {
+                if(!availableMovements.contains(point)){
+                    availableMovements.add(p);
+                }
+                
+            }
+        }
+
+
+        return availableMovements;
     }
 
     public boolean checkMate(boolean isWhite){

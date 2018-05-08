@@ -1,27 +1,46 @@
 package com.chess.server.figures;
 
+import com.chess.server.api.Castle;
+
 import java.util.*;
 
-public class Figure {
+public class Figure implements Castle {
 
     protected Point position;
     protected String typeOfFigure;
     protected List<Point> availableMovements;
     protected boolean isWhite;
+    protected boolean moved;
 
-    public Figure(Point position, String typeOfFigure, boolean isWhite){
+    public Figure(Point position, String typeOfFigure, boolean isWhite, List<Point> availableMovements){
+        moved = true;
         this.position = position;
         this.typeOfFigure = typeOfFigure;
         this.isWhite = isWhite;
-        availableMovements = new ArrayList<Point>();
+        this.availableMovements = new LinkedList<>(availableMovements);
         calculateAllAvailableMovements();
+
     }
 
+    public Figure(Point position, String typeOfFigure, boolean isWhite){
+        moved = true;
+        this.position = position;
+        this.typeOfFigure = typeOfFigure;
+        this.isWhite = isWhite;
+        this.availableMovements = new ArrayList<>();
+        calculateAllAvailableMovements();
+
+    }
+
+
+
     public Figure(Point position, String typeOfFigure){
+        moved = true;
         this.position = position;
         this.typeOfFigure = typeOfFigure;
         isWhite = false;
         availableMovements = new ArrayList<Point>();
+
         calculateAllAvailableMovements();
     }
 
@@ -50,6 +69,7 @@ public class Figure {
     public List<Point> getAvailableMovements() {
         return availableMovements;
     }
+
 
     public boolean isWhite() {
         return isWhite;
@@ -230,7 +250,7 @@ public class Figure {
 
         //ad castle mask
 
-        boolean isWhitePosition = kingPositionX == 3 && kingPositionY == 0;
+      /*  boolean isWhitePosition = kingPositionX == 3 && kingPositionY == 0;
         boolean isBlackPosition = kingPositionX == 4 && kingPositionY == 7;
         if(this instanceof King && !((King) this).isMoved() && (isBlackPosition || isWhitePosition)){
             for(Point castle : castleMask){
@@ -239,7 +259,7 @@ public class Figure {
 
                 movements.add(new Point(newX, newY));
             }
-        }
+        }*/
 
         return movements;
     }
@@ -305,7 +325,7 @@ public class Figure {
 
 
     public Figure copy(){
-        return new Figure(new Point(position.getPositionX(), position.getPositionY()), typeOfFigure, isWhite);
+        return new Figure(new Point(position.getPositionX(), position.getPositionY()), typeOfFigure, isWhite, availableMovements);
 
     }
 
@@ -318,5 +338,16 @@ public class Figure {
 
         return result;
 
+    }
+
+
+    @Override
+    public boolean isMoved() {
+        return moved;
+    }
+
+    @Override
+    public void setFigureMoved() {
+        moved=true;
     }
 }

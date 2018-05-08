@@ -6,7 +6,7 @@ import com.chess.server.api.Castle;
 ;import java.util.Objects;
 
 
-public class Rook extends Figure implements Castle {
+public class Rook extends Figure{
 
     private boolean moved;
 
@@ -14,21 +14,14 @@ public class Rook extends Figure implements Castle {
         super(point, "ROOK", isWhite);
         moved = true;
 
-        boolean isOnWhite = Objects.equals(point, new Point(3, 0));
-        boolean isOnBlack = Objects.equals(point, new Point(4, 7));
+        boolean isOnWhite = Objects.equals(point, new Point(0, 0)) || Objects.equals(point, new Point(7,0));
+        boolean isOnBlack = Objects.equals(point, new Point(0,7)) || Objects.equals(point, new Point(7, 7));
 
         if(isOnWhite || isOnBlack){
             moved = false;
         }
+
     }
 
-    @Override
-    public boolean isMoved() {
-        return moved;
-    }
 
-    @Override
-    public void setFigureMoved() {
-        moved = true;
-    }
 }

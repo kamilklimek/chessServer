@@ -1,6 +1,7 @@
 package com.chess.server.game;
 
 import com.chess.server.figures.Figure;
+import com.chess.server.figures.King;
 import com.chess.server.figures.Point;
 
 import java.util.LinkedList;
@@ -10,6 +11,15 @@ public class ChessAvailableMovements {
 
     private ChessExclusiveMovements chessExclusiveMovements;
     private Figure[][] boardFields;
+    private Board board;
+    private ChessCheckMate chessCheckMate;
+
+    public ChessAvailableMovements(Figure[][]boardFields, Board board, ChessCheckMate chessCheckMate){
+        this.boardFields = boardFields;
+        chessExclusiveMovements = new ChessExclusiveMovements(this.boardFields);
+        this.board = board;
+        this.chessCheckMate = chessCheckMate;
+    }
 
     public ChessAvailableMovements(Figure[][]boardFields){
         this.boardFields = boardFields;
@@ -39,7 +49,7 @@ public class ChessAvailableMovements {
         List<Point> availableMovements = chessExclusiveMovements.exclusiveAllyFigures(anotherBoard, figureIsWhite, movementsWithAllyFigures);
         availableMovements = chessExclusiveMovements.exclusivePawnBeatenUp(anotherBoard, figure, availableMovements);
 
-        System.out.println("Figura: "+figure+" jej ruchy: "+availableMovements);
+
         return availableMovements;
     }
 

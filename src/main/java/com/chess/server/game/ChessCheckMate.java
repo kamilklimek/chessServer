@@ -230,12 +230,14 @@ public class ChessCheckMate {
         return chessAvailableMovements.getAvailableMovements(from).contains(to) && !isMate;
     }
 
+
+
     public boolean checkIsMate(boolean isWhite){
         return checkIsMate(boardFigures, isWhite);
     }
 
 
-    private Figure findKingByColor(Figure[][] figures, boolean isWhite){
+    public static Figure findKingByColor(Figure[][] figures, boolean isWhite){
         for (Figure[] row:figures
                 ) {
             for (Figure figure:row
@@ -243,7 +245,7 @@ public class ChessCheckMate {
 
                 boolean isKing = figure.getTypeOfFigure() == "KING";
 
-                if(isKing && isWhite){
+                if(isKing && figure.isWhite() == isWhite){
                     return figure.copy();
                 }
 

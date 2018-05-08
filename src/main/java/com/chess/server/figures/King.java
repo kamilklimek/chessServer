@@ -5,9 +5,8 @@ import com.chess.server.api.Castle;
 
 import java.util.Objects;
 
-public class King extends Figure implements Castle {
+public class King extends Figure {
 
-    private boolean moved;
 
     public King(Point point, boolean isWhite){
         super(point, "KING", isWhite);
@@ -21,13 +20,4 @@ public class King extends Figure implements Castle {
         }
     }
 
-    @Override
-    public boolean isMoved() {
-        return moved;
-    }
-
-    @Override
-    public void setFigureMoved() {
-        moved=true;
-    }
 }
