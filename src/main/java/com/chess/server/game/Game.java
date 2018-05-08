@@ -23,8 +23,8 @@ public class Game extends Board {
     }
 
     private void initGame() {
-        playerOne = new Player("P1");
-        playerTwo = new Player("P2");
+        playerOne = new Player(1,"P1");
+        playerTwo = new Player(2, "P2");
         isTurnPlayersOne = false;
     }
 

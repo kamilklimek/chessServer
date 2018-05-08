@@ -19,8 +19,8 @@ public class App
        //game.play();
 
 
-        Server server = new Server(9999);
-        server.listening();
+        //Server server = new Server(9999);
+        //server.listening();
 
     }
 }
