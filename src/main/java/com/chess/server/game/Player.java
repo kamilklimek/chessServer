@@ -6,10 +6,13 @@ public class Player {
 
     private String login;
     private int id;
+    public boolean isWhite;
 
     public Player(int id, String login){
         this.login=login;
         this.id = id;
+        isWhite = false;
+
     }
 
     public int getId() {

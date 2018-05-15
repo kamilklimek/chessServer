@@ -54,9 +54,7 @@ public class Point {
 
     @Override
     public String toString() {
-        return "Point{" +
-                "positionX=" + positionX +
-                ", positionY=" + positionY +
-                '}';
+        return "[" + positionX + ","  + positionY +
+                "]";
     }
 }

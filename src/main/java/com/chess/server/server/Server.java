@@ -1,5 +1,7 @@
 package com.chess.server.server;
 
+import com.chess.server.game.Game;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -11,14 +13,17 @@ import java.util.Map;
 public class Server {
 
     static int numberClients = 0;
+    static int gamesNumber = 0;
     ServerSocket serverSocket;
     int port;
     Map<Integer, ServerService> clients;
+    Map<Integer, Game> games;
 
     public Server(int port){
         this.port = port;
         initServer();
         clients = new HashMap<>();
+        games = new HashMap<>();
     }
 
     private void initServer() {
@@ -26,7 +31,7 @@ public class Server {
         try{
             serverSocket = new ServerSocket(port);
         }catch(IOException e){
-            System.out.println("Error while creating a server socket on port: "+this.port+"\n. Perhaps port is already used.");
+            System.out.println("Error while creating a server socket on port: "+this.port+".\nPerhaps port is already used.");
             System.exit(1);
         }
     }

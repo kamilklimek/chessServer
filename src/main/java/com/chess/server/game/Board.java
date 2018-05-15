@@ -435,7 +435,16 @@ public class Board {
         Board.displayAllFigures(this.boardFields);
     }
 
+    public String getBoardInString(){
+        StringBuffer stringBuffer = new StringBuffer();
+        for(Figure[] figures : boardFields){
+            for(Figure figure : figures){
+                stringBuffer.append(figure.toString());
+            }
+        }
 
+        return stringBuffer.toString();
+    }
 
 
 

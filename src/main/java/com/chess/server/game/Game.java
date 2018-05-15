@@ -8,13 +8,17 @@ import java.util.Scanner;
 
 public class Game extends Board {
 
-    Player playerOne;
-    Player playerTwo;
-    boolean isTurnPlayersOne;
+    private Player playerOne;
+    private Player playerTwo;
+    private boolean isTurnPlayersOne;
+    private int surrender;
 
-    public Game(){
+    public Game(Player p1, Player p2){
         super();
+        this.playerOne = p1;
+        this.playerTwo = p2;
         initGame();
+        surrender = 0;
 
     }
     public Game(String fileName){
@@ -23,11 +27,8 @@ public class Game extends Board {
     }
 
     private void initGame() {
-        playerOne = new Player(1,"P1");
-        playerTwo = new Player(2, "P2");
         isTurnPlayersOne = false;
     }
-
 
 
     public boolean isTurnPlayerOne(){
@@ -35,7 +36,7 @@ public class Game extends Board {
     }
 
     public boolean hasNextTurn(){
-        return isCheckMate(isTurnPlayersOne) ? false : true;
+        return checkIsCheckMate(isTurnPlayersOne) ? false : surrender > 0 ? false : true;
     }
 
     public void nextTurn(){
@@ -46,7 +47,7 @@ public class Game extends Board {
         return moveFigure(from, to);
     }
 
-    private boolean isCheckMate(boolean isTurnPlayersOne){
+    private boolean isCheckMate(){
         return checkIsCheckMate(isTurnPlayersOne);
     }
 
@@ -54,6 +55,12 @@ public class Game extends Board {
 
         Scanner in = new Scanner(System.in);
         while(true){
+
+            if(surrender == 1){
+                //przegraly biale
+            }else if(surrender == 2){
+                //przegraly czarne
+            }
 
             if(checkIsCheckMate(isTurnPlayersOne)){
                 System.out.println("Szach mat???");
@@ -118,4 +125,7 @@ public class Game extends Board {
     }
 
 
+    public void surrender(boolean isWhite) {
+        surrender = isWhite ? 1 : 2;
+    }
 }

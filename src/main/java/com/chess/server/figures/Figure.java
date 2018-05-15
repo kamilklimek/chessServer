@@ -333,9 +333,7 @@ public class Figure implements Castle {
     @Override
     public String toString(){
         String result = "";
-
-        result += "Pozycja: " + position.toString() + ", typ: " + typeOfFigure + ", kolor: " + isWhite;
-
+        result += position.toString() + ":" + typeOfFigure + ":" + isWhite + "\n";
         return result;
 
     }

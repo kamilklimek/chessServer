@@ -52,6 +52,8 @@ public class Client {
         Client client = new Client();
 
         try {
+
+
             Scanner in = new Scanner(System.in);
 
             System.out.println("Podaj login: ");
@@ -60,6 +62,11 @@ public class Client {
 
             while(true){
 
+                byte [] bytes = new byte[1024];
+                client.in.read(bytes);
+                String result = new String(bytes).trim();
+                System.out.println(result);
+               /*
                 String command = in.nextLine();
                 System.out.println("Komenda: "+command);
                 if(command.equals("list")){
@@ -76,13 +83,21 @@ public class Client {
                    // client.out.print("exit");
                     client.socket.close();
                     break;
-                }
+                }else if(command.contains("invite")){
+                    byte [] bytes = new String(command).getBytes();
+                    client.out.write(bytes);
 
+                    byte [] byt = new byte[1024];
+                    client.in.read(byt);
+                    String result = new String(byt).trim();
+                    System.out.println(result);
+                }
+*/
             }
 
 
-            client.out.close();
-            client.socket.close();
+  //          client.out.close();
+    //        client.socket.close();
 
         } catch (IOException e) {
             System.out.println("Cant connect to server: "+e);
