@@ -13,11 +13,6 @@ import java.util.Scanner;
 public class App 
 {
     public static void main( String[] args ) {
-
-       //Game game = new Game("boards/tests/can_move_king_castling.game");
-
-       //game.play();
-
         int port = 10000;
         if(args.length > 0 ){
             port = Integer.parseInt(args[0]);
