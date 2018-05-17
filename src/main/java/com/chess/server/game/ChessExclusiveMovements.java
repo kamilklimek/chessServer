@@ -21,7 +21,7 @@ public class ChessExclusiveMovements {
             return availableMovements;
 
         List<Point> resultPoints = availableMovements;
-        List<Point> pawnBeatenUpMask = new LinkedList<>(Arrays.asList(
+        List<Point> pawnBeatenUpMask = new LinkedList<Point>(Arrays.asList(
                 new Point(-1, 1),
                 new Point(1, 1)
         ));

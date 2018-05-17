@@ -92,7 +92,7 @@ public class ChessCheckMate {
 
     private List<Point> getMovementsWhichMateKing(List<Point> kingsAttackerMovements, Figure king, Figure attacker) {
 
-        List<Point> mateMovements = new LinkedList<>();
+        List<Point> mateMovements = new LinkedList<Point>();
         int directionToKing = ChessExclusiveMovements.getDirection(attacker.getPosition(), king.getPosition());
 
         for (Point movement:kingsAttackerMovements
@@ -138,9 +138,9 @@ public class ChessCheckMate {
 
     private List<Point> excludeProtectedEnemyFigures(List<Point> kingMovements, Figure king) {
 
-        List<Point> excludedMovements = new LinkedList<>(kingMovements);
+        List<Point> excludedMovements = new LinkedList<Point>(kingMovements);
         boolean kingsColor = king.isWhite();
-        Set<Integer> indexToRemove = new LinkedHashSet<>();
+        Set<Integer> indexToRemove = new LinkedHashSet<Integer>();
 
         //wylaczenie szachowanych pól
         for (Point kingPoint:excludedMovements
@@ -160,7 +160,7 @@ public class ChessCheckMate {
             }
         }
 
-        List<Integer> indexToRemoveReversed = new ArrayList<>(indexToRemove);
+        List<Integer> indexToRemoveReversed = new ArrayList<Integer>(indexToRemove);
         Collections.reverse(indexToRemoveReversed);
 
         for(Integer index : indexToRemoveReversed){

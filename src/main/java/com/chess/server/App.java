@@ -18,8 +18,13 @@ public class App
 
        //game.play();
 
+        int port = 10000;
+        if(args.length > 0 ){
+            port = Integer.parseInt(args[0]);
+        }
 
-        Server server = new Server(9999);
+
+        Server server = new Server(port);
         server.listening();
 
     }

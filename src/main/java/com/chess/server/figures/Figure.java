@@ -17,7 +17,7 @@ public class Figure implements Castle {
         this.position = position;
         this.typeOfFigure = typeOfFigure;
         this.isWhite = isWhite;
-        this.availableMovements = new LinkedList<>(availableMovements);
+        this.availableMovements = new LinkedList<Point>(availableMovements);
         calculateAllAvailableMovements();
 
     }
@@ -27,7 +27,7 @@ public class Figure implements Castle {
         this.position = position;
         this.typeOfFigure = typeOfFigure;
         this.isWhite = isWhite;
-        this.availableMovements = new ArrayList<>();
+        this.availableMovements = new ArrayList<Point>();
         calculateAllAvailableMovements();
 
     }
@@ -182,7 +182,7 @@ public class Figure implements Castle {
         int pawnPositionX = position.getPositionX();
         int pawnPositionY = position.getPositionY();
 
-        List<Point> mask = new ArrayList<>(Arrays.asList(
+        List<Point> mask = new ArrayList<Point>(Arrays.asList(
                 new Point(0,1),
                 new Point(0,2),
                 new Point(1,1),
@@ -233,7 +233,7 @@ public class Figure implements Castle {
         int kingPositionX = position.getPositionX();
         int kingPositionY = position.getPositionY();
 
-        List<Point> castleMask = new ArrayList<>(Arrays.asList(
+        List<Point> castleMask = new ArrayList<Point>(Arrays.asList(
                 new Point(2, 0),
                 new Point(-2, 0)
         ));
@@ -250,16 +250,6 @@ public class Figure implements Castle {
 
         //ad castle mask
 
-      /*  boolean isWhitePosition = kingPositionX == 3 && kingPositionY == 0;
-        boolean isBlackPosition = kingPositionX == 4 && kingPositionY == 7;
-        if(this instanceof King && !((King) this).isMoved() && (isBlackPosition || isWhitePosition)){
-            for(Point castle : castleMask){
-                int newX = castle.getPositionX() + kingPositionX;
-                int newY = castle.getPositionY() + kingPositionY;
-
-                movements.add(new Point(newX, newY));
-            }
-        }*/
 
         return movements;
     }
@@ -270,7 +260,7 @@ public class Figure implements Castle {
         int knightPositionX = position.getPositionX();
         int knightPositionY = position.getPositionY();
 
-        List<Point> mask = new ArrayList<>(Arrays.asList(
+        List<Point> mask = new ArrayList<Point>(Arrays.asList(
                 new Point(-2,-1),
                 new Point(-2,1),
                 new Point(-1,2),

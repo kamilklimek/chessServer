@@ -17,7 +17,7 @@ public class BoardTests extends TestCase {
     public void testRookInGetAllAvaiableMovements(){
         Board board = new Board();
 
-        List<Point> expectedPoints = new ArrayList<>();
+        List<Point> expectedPoints = new ArrayList<Point>();
 
         //punkt 0,0 dla wieży
         List<Point> pointsFromBoard = board.getAvailableMovements(new Point(0, 0));
@@ -37,7 +37,7 @@ public class BoardTests extends TestCase {
     public void testBishopInGetAllAvailableMovements(){
         Board board = new Board();
 
-        List<Point> expectedPoints = new ArrayList<>();
+        List<Point> expectedPoints = new ArrayList<Point>();
 
         //punkt 0,2 dla gońca
         List<Point> pointsFromBoard = board.getAvailableMovements(new Point(0,2));
@@ -63,7 +63,7 @@ public class BoardTests extends TestCase {
     public void testBlackBishopInGetAllAvailableMovements(){
         Board board = new Board();
 
-        List<Point> expectedPoints = new ArrayList<>();
+        List<Point> expectedPoints = new ArrayList<Point>();
 
         //punkt 7,2 dla czarnego gońca
         List<Point> pointsFromBoard = board.getAvailableMovements(new Point(7,2));
@@ -89,7 +89,7 @@ public class BoardTests extends TestCase {
     public void testBishopCenterGetAllAvailableMovements(){
         Board board = new Board("boards/tests/bishop_center.game");
 
-        List<Point> expectedPoints = new ArrayList<>(Arrays.asList(
+        List<Point> expectedPoints = new ArrayList<Point>(Arrays.asList(
                 new Point(2,1),
                 new Point(4,1),
                 new Point(2,3),
@@ -113,7 +113,7 @@ public class BoardTests extends TestCase {
         Board board = new Board("boards/tests/king_leftcorner.game");
 
         //król 0,4
-        List<Point> expectedPoints = new ArrayList<>(Arrays.asList(
+        List<Point> expectedPoints = new ArrayList<Point>(Arrays.asList(
                 new Point(5,0),
                 new Point(5,1)
         ));
@@ -131,7 +131,7 @@ public class BoardTests extends TestCase {
         Board board = new Board("boards/tests/knight_leftcorent.game");
 
         //król 0,4
-        List<Point> expectedPoints = new ArrayList<>(Arrays.asList(
+        List<Point> expectedPoints = new ArrayList<Point>(Arrays.asList(
                 new Point(0,2),
                 new Point(2,2),
                 new Point(3,1)
@@ -150,7 +150,7 @@ public class BoardTests extends TestCase {
         Board board = new Board("boards/tests/pawn_center.game");
 
         //pion 6,4
-        List<Point> expectedPoints = new ArrayList<>(Arrays.asList(
+        List<Point> expectedPoints = new ArrayList<Point>(Arrays.asList(
                 new Point(5,4),
                 new Point(5,5)
         ));

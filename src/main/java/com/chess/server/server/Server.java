@@ -5,10 +5,7 @@ import com.chess.server.game.Game;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Server {
 
@@ -22,8 +19,8 @@ public class Server {
     public Server(int port){
         this.port = port;
         initServer();
-        clients = new HashMap<>();
-        games = new HashMap<>();
+        clients = new LinkedHashMap<Integer, ServerService>();
+        games = new HashMap<Integer, Game>();
     }
 
     private void initServer() {
@@ -84,6 +81,8 @@ public class Server {
 
         return result.toString();
     }
+
+
 
 
 }

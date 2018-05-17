@@ -3,24 +3,23 @@ package com.chess.server.server;
 import com.chess.server.figures.Point;
 import com.chess.server.game.Game;
 import com.chess.server.game.Player;
-import jdk.internal.util.xml.impl.Input;
 
 import java.io.*;
 import java.net.Socket;
 import java.util.List;
+import java.util.Map;
 
 public class ServerService extends Thread{
-
-
-    int id;
-    int gameId;
-    Server server;
-    Socket socket;
-    Player player;
-    OutputStream out;
-    InputStream in;
-    ServerService opponent;
-    Game game;
+    private int id;
+    private int gameId;
+    private Server server;
+    private Socket socket;
+    protected Player player;
+    private OutputStream out;
+    private InputStream in;
+    private ServerService opponent;
+    private Game game;
+    private boolean isInGame;
 
     public ServerService(Server server, Socket client, int id) {
         this.server = server;
@@ -30,11 +29,12 @@ public class ServerService extends Thread{
         this.gameId = -1;
         opponent = null;
         game = null;
+        this.isInGame=false;
     }
 
     private void initServerService() {
         try{
-            out =socket.getOutputStream();
+            out = socket.getOutputStream();
             in = socket.getInputStream();
         }catch(IOException e){
             System.out.println("Error while init server service. Problem with I/O.\n" + e);
@@ -46,142 +46,211 @@ public class ServerService extends Thread{
     @Override
     public void run(){
 
-        createPlayer();
+        String login = read();
+        createPlayer(login);
 
        while(true){
            String command = read();
 
-           boolean list = command.equals("list");
-           boolean invite = command.contains("invite=");
-           boolean exit = command.equals("exit");
+           boolean sendList = command.equals("list");
            boolean surrender = command.equals("surrender");
-           boolean available = command.equals("available=");
-           boolean move = command.equals("move=");
+           boolean exit = command.equals("exit");
+           boolean move = command.contains("move");
+           boolean sendAvailableMovements = command.contains("available");
+           boolean invitePlayer = command.contains("invite");
 
-           //not in game
-           if(gameId < 0){
+           if(isInGame){
 
-               if(list){
-                   write(server.getAllClients());
-               }else if(invite){
-                   int id = Integer.parseInt(command.substring(7, command.length()-1));
-                   invite(id);
+               if(sendAvailableMovements){
+                   int figurePositionX = Integer.parseInt(command.substring(10, 11));
+                   int figurePositionY = Integer.parseInt(command.substring(12, 13));
+                   Point figurePosition = new Point(figurePositionX, figurePositionY);
+
+                   sendAvailableMovements(figurePosition);
+               }else if(move){
+
+                   int fromX = Integer.parseInt(command.substring(6, 7));
+                   int fromY = Integer.parseInt(command.substring(8, 9));
+
+                   int toX= Integer.parseInt(command.substring(11, 12));
+                   int toY= Integer.parseInt(command.substring(13, 14));
+
+                   Point from = new Point(fromX, fromY);
+                   Point to = new Point(toX, toY);
+
+                   move(from, to);
+
+               }else if(surrender){
+
+                   surrender();
+
+               }
+
+
+
+           }else{
+
+               if(sendList){
+                   sendPlayerList();
                }else if(exit){
-                   System.out.println("Disconnected " + socket.getInetAddress().toString());
                    try {
-                       socket.close();
+                       server.clients.remove(this.id);
                        in.close();
                        out.close();
-                       break;
+                       socket.close();
                    } catch (IOException e) {
                        e.printStackTrace();
+                   } finally {
+                       break;
                    }
+               }else if(invitePlayer){
+                   int id = Integer.parseInt(command.substring(7, command.length()));
+                   invitePlayer(id);
                }
 
 
            }
-           //in game
-           else{
 
-               while(game.hasNextTurn()){
-                   String gameCommand = read();
 
-                   if(surrender){
-                       surrender();
-                   }else if(available){
-                       int x = Integer.parseInt(gameCommand.substring(10, 11));
-                       int y = Integer.parseInt(gameCommand.substring(13, 14));
-                       sendAvailable(x, y);
-                   }else if(move && game.isTurnPlayerOne() == player.isWhite){
-                       int x, y;
 
-                       x = Integer.parseInt(gameCommand.substring(5, 6));
-                       y = Integer.parseInt(gameCommand.substring(8, 9));
-                       Point from = new Point(x, y);
-
-                       x = Integer.parseInt(gameCommand.substring(11, 12));
-                       y = Integer.parseInt(gameCommand.substring(14, 15));
-                       Point to = new Point(x, y);
-
-                       int moveResult = game.move(from, to);
-                       write("moveresult="+moveResult);
-
-                       if(moveResult<3 && moveResult >= 0){
-                            game.nextTurn();
-                       }else if(moveResult == 3){
-                           write("pawnchange");
-                           String figureId = read();
-                           figureId = figureId.substring(0, figureId.length()-1);
-                       }
-
-                   }
-               }
-
-           }
 
        }
     }
 
-    private void sendAvailable(int x, int y) {
-        List<Point> movements = server.games.get(gameId).getAvailableMovements(new Point(x, y));
-        write(movements.toString());
-    }
-
     private void surrender() {
-        if(gameId >= 0){
-            game.surrender(player.isWhite);
-            gameId = -1;
-            opponent.gameId = -1;
-            opponent = null;
-            game = null;
-        }else{
-            write("You are not in a game!");
-        }
+        write("result=lose");
+        this.opponent.write("result=win");
+
+        server.games.remove(gameId);
+
+        this.opponent.gameId = -1;
+        this.opponent.game = null;
+        this.opponent.opponent = null;
+
+        this.gameId = -1;
+        this.opponent = null;
+        this.game = null;
 
     }
 
-    private void invite(int id) {
-        ServerService client = getClientById(id);
-        opponent = client;
-        System.out.println("Jego id: "+ id);
-        System.out.println("Uzytkownik to" + client.player.getLogin());
-        client.write("invitedby="+this.id);
-        write("Uzytkownik o id: "+ this.id +" został zaproszony do rozgrywki".getBytes());
+    private void move(Point from, Point to) {
 
-        String result = read();
-        boolean responded = result.contains("respond=");
+        int result = game.move(from, to, player.isWhite);
 
-        if(responded){
-            int resp = Integer.parseInt(result.substring(7, result.length()-1));
-            if(resp == 1){
-                System.out.println("Zaproszenie zostało przyjęte");
-                write("invitedresult=1");
-                int gameId = Server.gamesNumber++;
-                this.gameId = gameId;
-                client.gameId = gameId;
-
-                player.isWhite = true;
-                client.player.isWhite = false;
-
-                Game game = new Game(player, client.player);
-                this.game = game;
-                server.games.put(gameId, game);
-
-                write("board="+game.getBoardInString());
-                client.write("board="+game.getBoardInString());
-
-            }else{
-                System.out.println("Zaproszenie nie zostalo przyjete");
-                write("invitedresult=0");
-            }
+        boolean cantMove = result < 0;
+        boolean moveWithoutBeatenUp = result == 0;
+        boolean moveAndBeatenUp = result == 1;
+        boolean castling = result == 2;
+        boolean pawnChanging = result == 3;
 
 
+        if(cantMove){
+            write("0");
+        }else if(moveWithoutBeatenUp){
+            write("1");
+        }else if(moveAndBeatenUp){
+            write("2");
+        }else if(castling){
+            write("3");
+        }else if(pawnChanging){
+            write("4");
         }
+
+
+    }
+
+    private void sendAvailableMovements(Point figurePosition) {
+        List<Point> availableMovements = game.getAvailableMovements(figurePosition);
+
+        String result = String.valueOf(availableMovements.size()) + ":";
+
+        for (Point point:availableMovements
+                ) {
+            int positionX = point.getPositionX();
+            int positionY = point.getPositionY();
+
+            result += "[";
+            result += positionX;
+            result += ",";
+            result += positionY;
+            result += "]";
+        }
+
+        result += "#";
+
+        write(result);
+
+    }
+
+    private void invitePlayer(int id) {
+
+        boolean playerDoesNotExist = !server.clients.containsKey(id);
+
+        if(playerDoesNotExist){
+            write("inviteresult=false");
+        }
+
+        ServerService invitedPlayer = getClientById(id);
+        invitedPlayer.write("invitedby="+this.id);
+        String answer = invitedPlayer.read();
+
+        if(answer.equals("accept")){
+            write("inviteresult=true");
+            createGame(id);
+        }else{
+            write("inviteresult=false");
+        }
+
+
+
+    }
+
+    private void createGame(int id) {
+        opponent = getClientById(id);
+        game = new Game(this.player, opponent.player);
+        int gameId = Server.gamesNumber++;
+        server.games.put(gameId, game);
+
+        this.gameId=gameId;
+        this.isInGame=true;
+
+        opponent.game = this.game;
+        opponent.gameId = gameId;
+        opponent.opponent = this;
+        opponent.isInGame = true;
+
+        System.out.println("Utworzono gre dla graczy o ID: " + opponent.id + ", oraz :"+this.id + ". \nGra ma ID: "+gameId);
+
+    }
+
+    private void sendPlayerList() {
+
+        String result = String.valueOf(server.clients.size());
+        for (Map.Entry<Integer, ServerService> client : server.clients.entrySet()
+                ) {
+
+            result += client.getKey();
+            result += "-";
+            result += client.getValue().player.getLogin();
+            result += ":";
+        }
+
+        result = result.substring(0, result.length()-1);
+        result += "#";
+
+        write(result);
+        System.out.println("Wyslano: "+result);
 
     }
 
     public ServerService getClientById(int id){
         return server.clients.get(id);
+    }
+
+
+    public void createPlayer(String login){
+         player = new Player(id, login);
+         System.out.println("Utworzylem: "+player);
     }
 
     public boolean write(String msg){
@@ -202,26 +271,11 @@ public class ServerService extends Thread{
         try {
             in.read(bytes);
         } catch (IOException e) {
-            System.out.println("error while reading: "+e);
+            System.out.println("Error while reading: "+e);
         }
         return new String(bytes).trim();
     }
 
-    public void createPlayer(){
-        try{
-
-            byte [] buffor = new byte[1024];
-            in.read(buffor);
-            String readMsg = new String(buffor);
-            String login = readMsg.trim();
-            player = new Player(id, login);
-
-            System.out.println("Utworzylem: "+player);
-
-        } catch (IOException e) {
-            System.out.println("Error: "+e);
-        }
-    }
 
     @Override
     public String toString() {

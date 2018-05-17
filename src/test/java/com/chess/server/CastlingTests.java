@@ -21,7 +21,7 @@ public class CastlingTests extends TestCase{
         Board board = new Board("boards/tests/can_move_king_castling.game");
 
 
-        List<Point> expectedMovements = new LinkedList<>(Arrays.asList(
+        List<Point> expectedMovements = new LinkedList<Point>(Arrays.asList(
                 new Point(2, 7)
         ));
 

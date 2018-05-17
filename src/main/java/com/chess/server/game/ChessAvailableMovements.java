@@ -62,7 +62,7 @@ public class ChessAvailableMovements {
 
 
     private List<Point> getAllFiguresFromPointList(Figure[][] anotherBoard, List<Point> pseudoMovements) {
-        List<Point> figuresFromPseudoMovements = new LinkedList<>();
+        List<Point> figuresFromPseudoMovements = new LinkedList<Point>();
 
         for (Point p : pseudoMovements) {
             int pointX = p.getPositionX();

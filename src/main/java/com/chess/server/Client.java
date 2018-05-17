@@ -1,6 +1,5 @@
 package com.chess.server;
 
-import jdk.internal.util.xml.impl.Input;
 
 import java.io.*;
 import java.net.Socket;
@@ -15,7 +14,7 @@ public class Client {
     public Client(){
 
         try {
-            socket = new Socket("127.0.0.1", 9999);
+            socket = new Socket("194.182.86.204", 10000);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -62,10 +61,17 @@ public class Client {
 
             while(true){
 
+
+
+                String command = in.nextLine();
+                System.out.println("Komenda: "+command);
+                client.out.write(command.getBytes());
+
                 byte [] bytes = new byte[1024];
                 client.in.read(bytes);
                 String result = new String(bytes).trim();
                 System.out.println(result);
+
                /*
                 String command = in.nextLine();
                 System.out.println("Komenda: "+command);

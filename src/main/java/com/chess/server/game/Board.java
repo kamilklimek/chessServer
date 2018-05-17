@@ -185,7 +185,7 @@ public class Board {
     public List<Point> addCastling(Figure[][] anotherBoard, Figure king){
         System.out.println("Generuje castling");
         //Lista na ruchy krola
-        List<Point> availableMovements = new LinkedList<>();
+        List<Point> availableMovements = new LinkedList<Point>();
 
         //jezeli krol jest szachowany nie mozna wykonac roszady
         if(chessCheckMate.checkIsMate(anotherBoard, king.isWhite())) return availableMovements;
@@ -205,7 +205,7 @@ public class Board {
 
         //znajdz wieze tego samego koloru
         List<Figure> allyFigures = Board.getAllFiguresByColor(anotherBoard, kingIsWhite);
-        List<Figure> allyRooks = new LinkedList<>();
+        List<Figure> allyRooks = new LinkedList<Figure>();
 
         for (Figure figure:allyFigures
                 ) {
@@ -319,7 +319,7 @@ public class Board {
     }
 
     public static List<Figure> getAllFiguresByColor(Figure[][] board, boolean isWhite){
-        List<Figure> figures = new LinkedList<>();
+        List<Figure> figures = new LinkedList<Figure>();
 
         for(int i=0;i<8;i++){
             for(int j=0;j<8;j++){

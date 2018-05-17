@@ -1,0 +1,9 @@
+com/chess/server/PawnMovementsTests.class
+com/chess/server/QueenMovementsTests.class
+com/chess/server/CheckMateTests.class
+com/chess/server/BoardTests.class
+com/chess/server/BishopMovementsTests.class
+com/chess/server/KnightMovementsTests.class
+com/chess/server/CastlingTests.class
+com/chess/server/RookMovementsTests.class
+com/chess/server/KingMovementsTests.class
