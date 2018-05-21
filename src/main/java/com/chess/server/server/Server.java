@@ -1,5 +1,6 @@
 package com.chess.server.server;
 
+import com.chess.server.figures.Point;
 import com.chess.server.game.Game;
 
 import java.io.IOException;
@@ -39,7 +40,6 @@ public class Server {
 
        while(true){
            System.out.println("I am waiting for client...");
-
            try{
                Socket client = serverSocket.accept();
                System.out.println("Client connected from IP: "+client.getInetAddress().toString() +", and LocalPort: "+client.getPort());

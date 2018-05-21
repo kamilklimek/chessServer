@@ -46,11 +46,11 @@ public class Game extends Board {
     public int move(Point from, Point to, boolean isWhite){
         boolean isNotMyMove = isTurnPlayersOne != isWhite;
         if(isNotMyMove){
-            return -1;
+            return -3;
         }
 
         if(!hasNextTurn()){
-            return -1;
+            return -2;
         }
 
 

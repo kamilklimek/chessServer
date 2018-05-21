@@ -20,6 +20,7 @@ public class ServerService extends Thread{
     private ServerService opponent;
     private Game game;
     private boolean isInGame;
+    private boolean isConnected;
 
     public ServerService(Server server, Socket client, int id) {
         this.server = server;
@@ -30,6 +31,7 @@ public class ServerService extends Thread{
         opponent = null;
         game = null;
         this.isInGame=false;
+        this.isConnected = true;
     }
 
     private void initServerService() {
@@ -49,8 +51,15 @@ public class ServerService extends Thread{
         String login = read();
         createPlayer(login);
 
-       while(true){
+       while(isConnected){
            String command = read();
+
+           if(!isConnected){
+               break;
+           }
+
+           System.out.println("Serwis o ID: "+this.id);
+           System.out.println("Command: "+command);
 
            boolean sendList = command.equals("list");
            boolean surrender = command.equals("surrender");
@@ -62,9 +71,11 @@ public class ServerService extends Thread{
            if(isInGame){
 
                if(sendAvailableMovements){
-                   int figurePositionX = Integer.parseInt(command.substring(10, 11));
-                   int figurePositionY = Integer.parseInt(command.substring(12, 13));
+                   int figurePositionX = Integer.parseInt(command.substring(11, 12));
+                   int figurePositionY = Integer.parseInt(command.substring(13, 14));
                    Point figurePosition = new Point(figurePositionX, figurePositionY);
+
+                   System.out.println("POSITION: "+figurePosition.toString());
 
                    sendAvailableMovements(figurePosition);
                }else if(move){
@@ -75,15 +86,18 @@ public class ServerService extends Thread{
                    int toX= Integer.parseInt(command.substring(11, 12));
                    int toY= Integer.parseInt(command.substring(13, 14));
 
+
                    Point from = new Point(fromX, fromY);
                    Point to = new Point(toX, toY);
+                   System.out.println("FROM: "+from.toString());
+                   System.out.println("TO: "+to.toString());
 
                    move(from, to);
 
                }else if(surrender){
-
                    surrender();
-
+               }else{
+                   write("undefinded command");
                }
 
 
@@ -93,28 +107,38 @@ public class ServerService extends Thread{
                if(sendList){
                    sendPlayerList();
                }else if(exit){
-                   try {
-                       server.clients.remove(this.id);
-                       in.close();
-                       out.close();
-                       socket.close();
-                   } catch (IOException e) {
-                       e.printStackTrace();
-                   } finally {
-                       break;
-                   }
+
+                   closeConnection();
+                   break;
+
                }else if(invitePlayer){
                    int id = Integer.parseInt(command.substring(7, command.length()));
                    invitePlayer(id);
+               }else{
+                   write("undefinded command");
                }
 
 
            }
 
-
-
-
        }
+
+        closeConnection();
+    }
+
+    private void closeConnection() {
+        try {
+            out.close();
+            in.close();
+            socket.close();
+            if(isInGame){
+                this.server.games.remove(this.gameId);
+            }
+
+            this.server.clients.remove(this.id);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void surrender() {
@@ -123,6 +147,7 @@ public class ServerService extends Thread{
 
         server.games.remove(gameId);
 
+        this.opponent.isInGame = false;
         this.opponent.gameId = -1;
         this.opponent.game = null;
         this.opponent.opponent = null;
@@ -130,6 +155,8 @@ public class ServerService extends Thread{
         this.gameId = -1;
         this.opponent = null;
         this.game = null;
+        this.isInGame = false;
+
 
     }
 
@@ -137,7 +164,8 @@ public class ServerService extends Thread{
 
         int result = game.move(from, to, player.isWhite);
 
-        boolean cantMove = result < 0;
+        boolean cantMove = result == -1;
+        boolean isNotYourMove = result == -3;
         boolean moveWithoutBeatenUp = result == 0;
         boolean moveAndBeatenUp = result == 1;
         boolean castling = result == 2;
@@ -146,7 +174,10 @@ public class ServerService extends Thread{
 
         if(cantMove){
             write("0");
-        }else if(moveWithoutBeatenUp){
+        }else if(isNotYourMove){
+            write("-1");
+        }
+        else if(moveWithoutBeatenUp){
             write("1");
         }else if(moveAndBeatenUp){
             write("2");
@@ -156,6 +187,7 @@ public class ServerService extends Thread{
             write("4");
         }
 
+        System.out.println("Byl result: "+result);
 
     }
 
@@ -179,6 +211,7 @@ public class ServerService extends Thread{
         result += "#";
 
         write(result);
+        System.out.println("Wyslalem: "+result);
 
     }
 
@@ -207,6 +240,9 @@ public class ServerService extends Thread{
 
     private void createGame(int id) {
         opponent = getClientById(id);
+        this.player.isWhite = true;
+        opponent.player.isWhite = false;
+
         game = new Game(this.player, opponent.player);
         int gameId = Server.gamesNumber++;
         server.games.put(gameId, game);
@@ -225,7 +261,7 @@ public class ServerService extends Thread{
 
     private void sendPlayerList() {
 
-        String result = String.valueOf(server.clients.size());
+        String result = String.valueOf(server.clients.size()) + ":";
         for (Map.Entry<Integer, ServerService> client : server.clients.entrySet()
                 ) {
 
@@ -260,6 +296,7 @@ public class ServerService extends Thread{
             out.flush();
         } catch (IOException e) {
             System.out.println("Error while write msg: "+e);
+            this.isConnected = false;
             return false;
         }
 
@@ -272,6 +309,7 @@ public class ServerService extends Thread{
             in.read(bytes);
         } catch (IOException e) {
             System.out.println("Error while reading: "+e);
+            this.isConnected = false;
         }
         return new String(bytes).trim();
     }
