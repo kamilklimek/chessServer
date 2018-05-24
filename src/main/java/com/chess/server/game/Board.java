@@ -100,6 +100,7 @@ public class Board {
      * function to move figures
      * @param from position from wants move figure
      * @param to destinatin
+     * @param isTurnPlayersOne
      * @return 1 - figure is beaten up,
      *         0 - moved without beaten up
      *         -1 - can't move to destination point
@@ -108,7 +109,7 @@ public class Board {
      */
 
 
-    public int moveFigure(Point from, Point to){
+    public int moveFigure(Point from, Point to, boolean isTurnPlayersOne){
 
         System.out.println("Wejscie numer jeden dla: "+from+", do"+to);
         int fromX = from.getPositionX();
@@ -121,7 +122,16 @@ public class Board {
 
         if(canMove){
             Figure figureToMove = boardFields[fromY][fromX];
+
+            boolean itIsNotFigureTheSameColor = isTurnPlayersOne == figureToMove.isWhite();
+
+            if(itIsNotFigureTheSameColor){
+                return -1;
+            }
+
             boolean figureIsBeatenUp = boardFields[toY][toX].getTypeOfFigure() != "EMPTY";
+
+
 
             boolean isCastling = figureToMove.getTypeOfFigure() == "KING";
 

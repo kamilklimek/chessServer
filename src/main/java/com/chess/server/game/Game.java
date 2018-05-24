@@ -54,7 +54,7 @@ public class Game extends Board {
         }
 
 
-        int moveResult = moveFigure(from, to);
+        int moveResult = moveFigure(from, to, isTurnPlayersOne);
         if(moveResult>=0){
             nextTurn();
         }
