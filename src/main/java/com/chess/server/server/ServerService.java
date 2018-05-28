@@ -97,7 +97,7 @@ public class ServerService extends Thread{
                }else if(surrender){
                    surrender();
                }else{
-                   write("undefinded command");
+                   write("undefinded command are in game");
                }
 
 
@@ -114,11 +114,7 @@ public class ServerService extends Thread{
                }else if(invitePlayer){
                    int id = Integer.parseInt(command.substring(7, command.length()));
                    invitePlayer(id);
-               }else{
-                   write("undefinded command");
                }
-
-
            }
 
        }
@@ -225,12 +221,16 @@ public class ServerService extends Thread{
 
         ServerService invitedPlayer = getClientById(id);
         invitedPlayer.write("invitedby="+this.id);
+        System.out.println("Czekam na wiadomosc od klienta: ");
         String answer = invitedPlayer.read();
+       // String answer = read();
+        System.out.println("Otrzymalem wiadomosc zwrotna: "+answer);
 
         if(answer.equals("accept")){
             write("inviteresult=true");
             createGame(id);
         }else{
+            System.out.println("Nie utworzylme gry");
             write("inviteresult=false");
         }
 
