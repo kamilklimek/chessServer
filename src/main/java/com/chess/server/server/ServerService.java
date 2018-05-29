@@ -86,7 +86,7 @@ public class ServerService extends Thread{
                    int toX= Integer.parseInt(command.substring(11, 12));
                    int toY= Integer.parseInt(command.substring(13, 14));
 
-                   String idFigure = command.substring(15,17);
+                   String idFigure = command.substring(15,18);
 
 
 
