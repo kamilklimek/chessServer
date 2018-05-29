@@ -86,19 +86,23 @@ public class ServerService extends Thread{
                    int toX= Integer.parseInt(command.substring(11, 12));
                    int toY= Integer.parseInt(command.substring(13, 14));
 
+                   String idFigure = command.substring(15,17);
+
+
 
                    Point from = new Point(fromX, fromY);
                    Point to = new Point(toX, toY);
                    System.out.println("FROM: "+from.toString());
                    System.out.println("TO: "+to.toString());
+                   System.out.println("ID figury: "+idFigure);
 
-                   move(from, to);
+                   move(from, to, idFigure);
 
                }else if(surrender){
                    surrender();
-               }else{
+               }/*else{
                    write("undefinded command are in game");
-               }
+               }*/
 
 
 
@@ -114,7 +118,9 @@ public class ServerService extends Thread{
                }else if(invitePlayer){
                    int id = Integer.parseInt(command.substring(7, command.length()));
                    invitePlayer(id);
-               }
+               }/*else{
+                   write("undefinded command are in game:" + command);
+               }*/
            }
 
        }
@@ -156,7 +162,7 @@ public class ServerService extends Thread{
 
     }
 
-    private void move(Point from, Point to) {
+    private void move(Point from, Point to, String idFigure) {
 
         int result = game.move(from, to, player.isWhite);
 
@@ -168,22 +174,25 @@ public class ServerService extends Thread{
         boolean pawnChanging = result == 3;
 
 
-        if(cantMove){
-            write("0");
-        }else if(isNotYourMove){
-            write("-1");
+        String resulted = "moved=";
+        if(cantMove || isNotYourMove){
+            resulted+=0;
         }
         else if(moveWithoutBeatenUp){
-            write("1");
+            resulted+=1;
         }else if(moveAndBeatenUp){
-            write("2");
+            resulted+=2;
         }else if(castling){
-            write("3");
+            resulted+=3;
         }else if(pawnChanging){
-            write("4");
+            resulted+=4;
         }
 
-        System.out.println("Byl result: "+result);
+        resulted+="["+from.getPositionX()+","+from.getPositionY()+"]["+to.getPositionX()+","+to.getPositionY()+"]"+idFigure+"#";
+        write(resulted);
+        opponent.write(resulted);
+
+        System.out.println("Byl result przy ruchu: "+resulted);
 
     }
 
