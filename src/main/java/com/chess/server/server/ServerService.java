@@ -188,7 +188,13 @@ public class ServerService extends Thread{
             resulted+=4;
         }
 
-        resulted+="["+from.getPositionX()+","+from.getPositionY()+"]["+to.getPositionX()+","+to.getPositionY()+"]"+idFigure+"#";
+        if(castling){
+            Point [] points = game.getCastled();
+            resulted+="["+from.getPositionX()+","+from.getPositionY()+"]["+to.getPositionX()+","+to.getPositionY()+"]["+points[0].getPositionX()+","+points[0].getPositionY()+"]["+points[1].getPositionX()+","+points[1].getPositionY()+"]"+idFigure+"#";
+        }else{
+            resulted+="["+from.getPositionX()+","+from.getPositionY()+"]["+to.getPositionX()+","+to.getPositionY()+"]"+idFigure+"#";
+        }
+
         write(resulted);
         opponent.write(resulted);
 

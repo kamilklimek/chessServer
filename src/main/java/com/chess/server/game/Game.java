@@ -43,6 +43,10 @@ public class Game extends Board {
         isTurnPlayersOne = !isTurnPlayersOne;
     }
 
+    public Point[] getCastled(){
+        return castledRook;
+    }
+
     public int move(Point from, Point to, boolean isWhite){
         boolean isNotMyMove = isTurnPlayersOne != isWhite;
         if(isNotMyMove){

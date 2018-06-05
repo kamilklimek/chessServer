@@ -15,7 +15,7 @@ public class Board {
     private String nameFile;
     private ChessAvailableMovements chessAvailableMovements;
     private ChessCheckMate chessCheckMate;
-
+    protected Point[] castledRook;
 
 
     public Board() {
@@ -33,7 +33,7 @@ public class Board {
         chessCheckMate = new ChessCheckMate(boardFields);
         chessAvailableMovements = new ChessAvailableMovements(boardFields);
         initGameFromFile(nameFile);
-
+        castledRook = new Point[2];
     }
 
     private void initGameFromFile(String fileName){
@@ -121,6 +121,7 @@ public class Board {
         boolean canMove = canMove(from, to);
 
         if(canMove){
+            recalculatePseudoMovements();
             Figure figureToMove = boardFields[fromY][fromX];
 
             boolean itIsNotFigureTheSameColor = isTurnPlayersOne == figureToMove.isWhite();
@@ -135,13 +136,18 @@ public class Board {
 
             boolean isCastling = figureToMove.getTypeOfFigure() == "KING";
 
-            if(isCastling){
+            if(isCastling && Math.abs(from.getPositionX() - to.getPositionX()) == 2 && from.getPositionY() == from.getPositionY()){
                 int substract = from.getPositionX() - to.getPositionX();
 
+                System.out.println("Start ");
                 if(substract > 0 ){
                     move(new Point(0, from.getPositionY()), new Point(3, from.getPositionY()));
+                    castledRook[0] = new Point(0, from.getPositionY());
+                    castledRook[1] = new Point(3, from.getPositionY());
                 }else{
                     move(new Point(7, from.getPositionY()), new Point(5, from.getPositionY()));
+                    castledRook[0] = new Point(7, from.getPositionY());
+                    castledRook[1] = new Point(5, from.getPositionY());
                 }
 
                 boardFields[toY][toX] = boardFields[fromY][fromX];
@@ -166,17 +172,29 @@ public class Board {
 
             }
 
-
+            System.out.println("Jestem na pozycji wykonania ruchu");
             boardFields[toY][toX] = boardFields[fromY][fromX];
             boardFields[toY][toX].setPosition(to);
             boardFields[fromY][fromX] = new Figure(from, "EMPTY");
 
 
 
-            return figureIsBeatenUp ? 1 : isCastling ? 2 : pawnArrived ? 3 : 0;
+            return figureIsBeatenUp ? 1 : pawnArrived ? 3 : 0;
         }
 
         return -1;
+    }
+
+    private void recalculatePseudoMovements() {
+
+        for (Figure[] figures:boardFields
+             ) {
+            for(Figure figure:figures){
+                figure.calculateAllAvailableMovements();
+            }
+
+        }
+
     }
 
     private void move(Point from, Point to) {
@@ -346,6 +364,12 @@ public class Board {
 
     public List<Point> getAvailableMovements(Point point){
         List<Point> availableMovements = chessAvailableMovements.getAvailableMovements(point);
+        System.out.println("Ruchy dla figury: "+point.toString());
+        for (Point pointA:availableMovements
+             ) {
+            System.out.println(pointA);
+        }
+        System.out.println("======");
 
         Figure figure = boardFields[point.getPositionY()][point.getPositionX()];
         if(figure.getTypeOfFigure()=="KING"){

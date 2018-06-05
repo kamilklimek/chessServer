@@ -43,12 +43,14 @@ public class ChessAvailableMovements {
         boolean figureIsWhite = figure.isWhite();
 
         List<Point> pseudoMovements = figure.getAvailableMovements();
+
         List<Point> allFiguresInPseudoMovements = getAllFiguresFromPointList(anotherBoard, pseudoMovements);
 
         List<Point> movementsWithAllyFigures = chessExclusiveMovements.exclusiveUnAvailablePoint(figure, pseudoMovements, allFiguresInPseudoMovements);
         List<Point> availableMovements = chessExclusiveMovements.exclusiveAllyFigures(anotherBoard, figureIsWhite, movementsWithAllyFigures);
         availableMovements = chessExclusiveMovements.exclusivePawnBeatenUp(anotherBoard, figure, availableMovements);
-
+        System.out.println("Figura: "+point);
+        System.out.println("Jej ruchy mozliwe: "+availableMovements);
 
         return availableMovements;
     }
