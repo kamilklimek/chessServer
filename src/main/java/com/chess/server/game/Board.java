@@ -111,7 +111,6 @@ public class Board {
 
     public int moveFigure(Point from, Point to, boolean isTurnPlayersOne){
 
-        System.out.println("Wejscie numer jeden dla: "+from+", do"+to);
         int fromX = from.getPositionX();
         int fromY = from.getPositionY();
 
@@ -154,7 +153,6 @@ public class Board {
                 boardFields[toY][toX].setPosition(to);
                 boardFields[fromY][fromX] = new Figure(from, "EMPTY");
 
-                System.out.println("NO I KONIEC MOVE FIGURE, CASTLE ROBIE");
                 return 2;
 
             }
@@ -172,7 +170,6 @@ public class Board {
 
             }
 
-            System.out.println("Jestem na pozycji wykonania ruchu");
             boardFields[toY][toX] = boardFields[fromY][fromX];
             boardFields[toY][toX].setPosition(to);
             boardFields[fromY][fromX] = new Figure(from, "EMPTY");
@@ -211,7 +208,6 @@ public class Board {
     }
 
     public List<Point> addCastling(Figure[][] anotherBoard, Figure king){
-        System.out.println("Generuje castling");
         //Lista na ruchy krola
         List<Point> availableMovements = new LinkedList<Point>();
 

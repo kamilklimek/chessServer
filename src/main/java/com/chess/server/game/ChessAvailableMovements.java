@@ -49,8 +49,6 @@ public class ChessAvailableMovements {
         List<Point> movementsWithAllyFigures = chessExclusiveMovements.exclusiveUnAvailablePoint(figure, pseudoMovements, allFiguresInPseudoMovements);
         List<Point> availableMovements = chessExclusiveMovements.exclusiveAllyFigures(anotherBoard, figureIsWhite, movementsWithAllyFigures);
         availableMovements = chessExclusiveMovements.exclusivePawnBeatenUp(anotherBoard, figure, availableMovements);
-        System.out.println("Figura: "+point);
-        System.out.println("Jej ruchy mozliwe: "+availableMovements);
 
         return availableMovements;
     }

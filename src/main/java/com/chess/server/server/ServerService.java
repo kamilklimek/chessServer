@@ -92,9 +92,6 @@ public class ServerService extends Thread{
 
                    Point from = new Point(fromX, fromY);
                    Point to = new Point(toX, toY);
-                   System.out.println("FROM: "+from.toString());
-                   System.out.println("TO: "+to.toString());
-                   System.out.println("ID figury: "+idFigure);
 
                    move(from, to, idFigure);
 
@@ -238,7 +235,6 @@ public class ServerService extends Thread{
         invitedPlayer.write("invitedby="+this.id);
         System.out.println("Czekam na wiadomosc od klienta: ");
         String answer = invitedPlayer.read();
-       // String answer = read();
         System.out.println("Otrzymalem wiadomosc zwrotna: "+answer);
 
         if(answer.equals("accept")){
